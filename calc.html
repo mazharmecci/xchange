@@ -82,14 +82,21 @@
       white-space: pre-line;
     }
 
-        .two-column {
-      display: flex;
-      gap: 1rem;
-    }
-    
-    .column {
-      flex: 1;
-    }
+.two-column {
+  display: flex;
+  gap: 1rem;
+}
+
+.column {
+  flex: 1;
+}
+
+/* Responsive stacking for mobile */
+@media (max-width: 600px) {
+  .two-column {
+    flex-direction: column;
+  }
+}
 
   </style>
 </head>
@@ -142,7 +149,8 @@
     <label>Others (INR)</label>
     <input type="number" id="others" placeholder="e.g. 15000" />
   </div>
-</div>    
+</div>
+ 
 
     <button class="calculate-btn" onclick="calculateLanding()">Calculate Landing Cost</button>
 
