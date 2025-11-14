@@ -52,6 +52,12 @@
       font-size: 1rem;
     }
 
+    input[readonly] {
+      background-color: #f0f0f0;
+      color: #555;
+      cursor: not-allowed;
+    }
+
     .form-section {
       margin-bottom: 1.5rem;
     }
@@ -65,7 +71,6 @@
       flex: 1;
     }
 
-    /* Responsive stacking for mobile */
     @media (max-width: 600px) {
       .two-column {
         flex-direction: column;
@@ -125,10 +130,10 @@
 
     <div class="form-section">
       <label>💱 Live Exchange Rate (INR)</label>
-      <input type="number" id="exchangeRate" placeholder="e.g. 88.74" />
+      <input type="number" id="exchangeRate" placeholder="e.g. 88.74" oninput="updateBankRate()" />
 
       <label>🏦 Bank Rate (INR)</label>
-      <input type="number" id="bankRate" placeholder="e.g. 90.51" />
+      <input type="number" id="bankRate" readonly />
     </div>
 
     <div class="form-section two-column">
@@ -160,6 +165,12 @@
       document.getElementById("priceLabel").innerText = `💵 Instrument Price (${currency})`;
       document.getElementById("packingLabel").innerText = `📦 Packing Price (${currency})`;
       document.getElementById("shippingLabel").innerText = `🚚 Shipping Cost (${currency})`;
+    }
+
+    function updateBankRate() {
+      const exchangeRate = parseFloat(document.getElementById("exchangeRate").value) || 0;
+      const bankRate = exchangeRate * 1.02;
+      document.getElementById("bankRate").value = bankRate.toFixed(2);
     }
 
     function calculateLanding() {
