@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>XCHANGE | Cost Breakdown</title>
+  <title>XCHANGE | Currency-Aware Cost Breakdown</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, sans-serif;
@@ -43,7 +43,7 @@
       color: #4b3b2e;
     }
 
-    input {
+    input, select {
       width: 100%;
       padding: 0.6rem;
       margin-top: 0.3rem;
@@ -79,6 +79,7 @@
       font-weight: 600;
       color: #5a4632;
       font-size: 1.1rem;
+      white-space: pre-line;
     }
   </style>
 </head>
@@ -87,14 +88,23 @@
     <h2>XCHANGE | Instrument Cost Calculator</h2>
 
     <div class="form-section">
-      <label>Instrument Price (USD)</label>
-      <input type="number" id="priceUSD" placeholder="e.g. 16500" />
+      <label>Select Currency</label>
+      <select id="currencySelector" onchange="updateCurrency()">
+        <option value="USD" selected>USD</option>
+        <option value="GBP">GBP</option>
+        <option value="EUR">EUR</option>
+      </select>
+    </div>
 
-      <label>Packing Price (USD)</label>
-      <input type="number" id="packingUSD" placeholder="e.g. 56.35" />
+    <div class="form-section">
+      <label id="priceLabel">Instrument Price (USD)</label>
+      <input type="number" id="price" placeholder="e.g. 16500" />
 
-      <label>Shipping Cost (USD)</label>
-      <input type="number" id="shippingUSD" placeholder="e.g. 800" />
+      <label id="packingLabel">Packing Price (USD)</label>
+      <input type="number" id="packing" placeholder="e.g. 56.35" />
+
+      <label id="shippingLabel">Shipping Cost (USD)</label>
+      <input type="number" id="shipping" placeholder="e.g. 800" />
     </div>
 
     <div class="form-section">
@@ -125,10 +135,18 @@
   </div>
 
   <script>
+    function updateCurrency() {
+      const currency = document.getElementById("currencySelector").value;
+      document.getElementById("priceLabel").innerText = `Instrument Price (${currency})`;
+      document.getElementById("packingLabel").innerText = `Packing Price (${currency})`;
+      document.getElementById("shippingLabel").innerText = `Shipping Cost (${currency})`;
+    }
+
     function calculateLanding() {
-      const priceUSD = parseFloat(document.getElementById("priceUSD").value) || 0;
-      const packingUSD = parseFloat(document.getElementById("packingUSD").value) || 0;
-      const shippingUSD = parseFloat(document.getElementById("shippingUSD").value) || 0;
+      const currency = document.getElementById("currencySelector").value;
+      const price = parseFloat(document.getElementById("price").value) || 0;
+      const packing = parseFloat(document.getElementById("packing").value) || 0;
+      const shipping = parseFloat(document.getElementById("shipping").value) || 0;
       const exchangeRate = parseFloat(document.getElementById("exchangeRate").value) || 0;
 
       const duty = parseFloat(document.getElementById("duty").value) || 0;
@@ -136,12 +154,12 @@
       const bankCharges = parseFloat(document.getElementById("bankCharges").value) || 0;
       const others = parseFloat(document.getElementById("others").value) || 0;
 
-      const totalUSD = priceUSD + packingUSD + shippingUSD;
-      const totalINR = totalUSD * exchangeRate;
+      const totalForeign = price + packing + shipping;
+      const totalINR = totalForeign * exchangeRate;
       const landingINR = totalINR + duty + clearance + bankCharges + others;
 
       document.getElementById("resultDisplay").innerText =
-        `Total Cost (USD): $${totalUSD.toFixed(2)}\nLanding Cost (INR): ₹${landingINR.toFixed(2)}`;
+        `Total Cost (${currency}): ${totalForeign.toFixed(2)}\nLanding Cost (INR): ₹${landingINR.toFixed(2)}`;
     }
   </script>
 </body>
