@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="exchange-rate-loader.js"></script>
 
-  <title>XCHANGE | Currency-Aware Cost Breakdown</title>
+  <title>XCHANGE</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, sans-serif;
@@ -130,14 +130,14 @@
 </head>
 <body onload="loadExchangeRates()">
   <div class="form-wrapper">
-    <h2>XCHANGE | Instrument Cost Calculator</h2>
+    <h2>XCHANGE | Instrument Cost Calc</h2>
 
     <div class="form-section">
       <label>🌍 Select Currency</label>
       <select id="currencySelector" onchange="updateCurrency()">
-        <option value="USD" selected>USD 💵</option>
+        <option value="USD">USD 💵</option>
         <option value="GBP">GBP 💷</option>
-        <option value="EUR">EUR 💶</option>
+        <option value="EUR" selected>EUR 💶</option>
       </select>
     </div>
 
