@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>XCHANGE | Cost Breakdown</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: linear-gradient(135deg, #fff3e6, #fbe8d2);
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .form-wrapper {
+      background: #fff8f2;
+      padding: 2rem 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      max-width: 600px;
+      width: 100%;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    h2 {
+      text-align: center;
+      color: #5a4632;
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 500;
+      color: #4b3b2e;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.3rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .form-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .calculate-btn {
+      background: #d9a066;
+      color: #fff;
+      border: none;
+      padding: 0.8rem 1.2rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s ease;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .calculate-btn:hover {
+      background: #c97c5d;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .result {
+      margin-top: 1.5rem;
+      font-weight: 600;
+      color: #5a4632;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-wrapper">
+    <h2>XCHANGE | Instrument Cost Calculator</h2>
+
+    <div class="form-section">
+      <label>Instrument Price (USD)</label>
+      <input type="number" id="priceUSD" placeholder="e.g. 16500" />
+
+      <label>Packing Price (USD)</label>
+      <input type="number" id="packingUSD" placeholder="e.g. 56.35" />
+
+      <label>Shipping Cost (USD)</label>
+      <input type="number" id="shippingUSD" placeholder="e.g. 800" />
+    </div>
+
+    <div class="form-section">
+      <label>Live Exchange Rate (INR)</label>
+      <input type="number" id="exchangeRate" placeholder="e.g. 88.74" />
+
+      <label>Bank Rate (INR)</label>
+      <input type="number" id="bankRate" placeholder="e.g. 90.51" />
+    </div>
+
+    <div class="form-section">
+      <label>Duty (INR)</label>
+      <input type="number" id="duty" placeholder="e.g. 154012.24" />
+
+      <label>Clearance (INR)</label>
+      <input type="number" id="clearance" placeholder="e.g. 30000" />
+
+      <label>Bank Charges (INR)</label>
+      <input type="number" id="bankCharges" placeholder="e.g. 7000" />
+
+      <label>Others (INR)</label>
+      <input type="number" id="others" placeholder="e.g. 15000" />
+    </div>
+
+    <button class="calculate-btn" onclick="calculateLanding()">Calculate Landing Cost</button>
+
+    <div class="result" id="resultDisplay"></div>
+  </div>
+
+  <script>
+    function calculateLanding() {
+      const priceUSD = parseFloat(document.getElementById("priceUSD").value) || 0;
+      const packingUSD = parseFloat(document.getElementById("packingUSD").value) || 0;
+      const shippingUSD = parseFloat(document.getElementById("shippingUSD").value) || 0;
+      const exchangeRate = parseFloat(document.getElementById("exchangeRate").value) || 0;
+
+      const duty = parseFloat(document.getElementById("duty").value) || 0;
+      const clearance = parseFloat(document.getElementById("clearance").value) || 0;
+      const bankCharges = parseFloat(document.getElementById("bankCharges").value) || 0;
+      const others = parseFloat(document.getElementById("others").value) || 0;
+
+      const totalUSD = priceUSD + packingUSD + shippingUSD;
+      const totalINR = totalUSD * exchangeRate;
+      const landingINR = totalINR + duty + clearance + bankCharges + others;
+
+      document.getElementById("resultDisplay").innerText =
+        `Total Cost (USD): $${totalUSD.toFixed(2)}\nLanding Cost (INR): ₹${landingINR.toFixed(2)}`;
+    }
+  </script>
+</body>
+</html>
