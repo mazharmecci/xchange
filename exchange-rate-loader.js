@@ -20,3 +20,15 @@ function loadExchangeRates() {
       console.error("Error loading exchange rates:", error);
     });
 }
+
+function updateCurrency() {
+  const currency = document.getElementById("currencySelector").value;
+
+  document.getElementById("priceLabel").innerText = `💵 Instrument Price (${currency})`;
+  document.getElementById("packingLabel").innerText = `📦 Packing Price (${currency})`;
+  document.getElementById("shippingLabel").innerText = `🚚 Shipping Cost (${currency})`;
+
+  const rate = exchangeRates[currency] || 0;
+  document.getElementById("exchangeRate").value = rate.toFixed(4);
+  document.getElementById("bankRate").value = (rate * 1.02).toFixed(4);
+}
