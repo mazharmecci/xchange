@@ -56,6 +56,22 @@
       margin-bottom: 1.5rem;
     }
 
+    .two-column {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .column {
+      flex: 1;
+    }
+
+    /* Responsive stacking for mobile */
+    @media (max-width: 600px) {
+      .two-column {
+        flex-direction: column;
+      }
+    }
+
     .calculate-btn {
       background: #d9a066;
       color: #fff;
@@ -81,23 +97,6 @@
       font-size: 1.1rem;
       white-space: pre-line;
     }
-
-.two-column {
-  display: flex;
-  gap: 1rem;
-}
-
-.column {
-  flex: 1;
-}
-
-/* Responsive stacking for mobile */
-@media (max-width: 600px) {
-  .two-column {
-    flex-direction: column;
-  }
-}
-
   </style>
 </head>
 <body>
@@ -105,54 +104,52 @@
     <h2>XCHANGE | Instrument Cost Calculator</h2>
 
     <div class="form-section">
-      <label>Select Currency</label>
+      <label>🌍 Select Currency</label>
       <select id="currencySelector" onchange="updateCurrency()">
-        <option value="USD" selected>USD</option>
-        <option value="GBP">GBP</option>
-        <option value="EUR">EUR</option>
+        <option value="USD" selected>USD 💵</option>
+        <option value="GBP">GBP 💷</option>
+        <option value="EUR">EUR 💶</option>
       </select>
     </div>
 
     <div class="form-section">
-      <label id="priceLabel">Instrument Price (USD)</label>
+      <label id="priceLabel">💵 Instrument Price (USD)</label>
       <input type="number" id="price" placeholder="e.g. 16500" />
 
-      <label id="packingLabel">Packing Price (USD)</label>
+      <label id="packingLabel">📦 Packing Price (USD)</label>
       <input type="number" id="packing" placeholder="e.g. 56.35" />
 
-      <label id="shippingLabel">Shipping Cost (USD)</label>
+      <label id="shippingLabel">🚚 Shipping Cost (USD)</label>
       <input type="number" id="shipping" placeholder="e.g. 800" />
     </div>
 
     <div class="form-section">
-      <label>Live Exchange Rate (INR)</label>
+      <label>💱 Live Exchange Rate (INR)</label>
       <input type="number" id="exchangeRate" placeholder="e.g. 88.74" />
 
-      <label>Bank Rate (INR)</label>
+      <label>🏦 Bank Rate (INR)</label>
       <input type="number" id="bankRate" placeholder="e.g. 90.51" />
     </div>
 
-<!-- Inside your existing .form-wrapper -->
-<div class="form-section two-column">
-  <div class="column">
-    <label>Duty (INR)</label>
-    <input type="number" id="duty" placeholder="e.g. 154012.24" />
+    <div class="form-section two-column">
+      <div class="column">
+        <label>🧾 Duty (INR)</label>
+        <input type="number" id="duty" placeholder="e.g. 154012.24" />
 
-    <label>Bank Charges (INR)</label>
-    <input type="number" id="bankCharges" placeholder="e.g. 7000" />
-  </div>
+        <label>💳 Bank Charges (INR)</label>
+        <input type="number" id="bankCharges" placeholder="e.g. 7000" />
+      </div>
 
-  <div class="column">
-    <label>Clearance (INR)</label>
-    <input type="number" id="clearance" placeholder="e.g. 30000" />
+      <div class="column">
+        <label>🏛️ Clearance (INR)</label>
+        <input type="number" id="clearance" placeholder="e.g. 30000" />
 
-    <label>Others (INR)</label>
-    <input type="number" id="others" placeholder="e.g. 15000" />
-  </div>
-</div>
- 
+        <label>⚙️ Others (INR)</label>
+        <input type="number" id="others" placeholder="e.g. 15000" />
+      </div>
+    </div>
 
-    <button class="calculate-btn" onclick="calculateLanding()">Calculate Landing Cost</button>
+    <button class="calculate-btn" onclick="calculateLanding()">✨ Calculate Landing Cost</button>
 
     <div class="result" id="resultDisplay"></div>
   </div>
@@ -160,9 +157,9 @@
   <script>
     function updateCurrency() {
       const currency = document.getElementById("currencySelector").value;
-      document.getElementById("priceLabel").innerText = `Instrument Price (${currency})`;
-      document.getElementById("packingLabel").innerText = `Packing Price (${currency})`;
-      document.getElementById("shippingLabel").innerText = `Shipping Cost (${currency})`;
+      document.getElementById("priceLabel").innerText = `💵 Instrument Price (${currency})`;
+      document.getElementById("packingLabel").innerText = `📦 Packing Price (${currency})`;
+      document.getElementById("shippingLabel").innerText = `🚚 Shipping Cost (${currency})`;
     }
 
     function calculateLanding() {
@@ -182,7 +179,7 @@
       const landingINR = totalINR + duty + clearance + bankCharges + others;
 
       document.getElementById("resultDisplay").innerText =
-        `Total Cost (${currency}): ${totalForeign.toFixed(2)}\nLanding Cost (INR): ₹${landingINR.toFixed(2)}`;
+        `📊 Total Cost (${currency}): ${totalForeign.toFixed(2)}\n🎯 Landing Cost (INR): ₹${landingINR.toFixed(2)}`;
     }
   </script>
 </body>
