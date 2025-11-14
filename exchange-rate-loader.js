@@ -58,3 +58,34 @@ function updateCurrency() {
     statusEl.innerText = `⚠️ Rate not available`;
   }
 }
+
+function calculateLanding() {
+  const currency = document.getElementById("currencySelector").value;
+  const price = parseFloat(document.getElementById("price").value) || 0;
+  const packing = parseFloat(document.getElementById("packing").value) || 0;
+  const shipping = parseFloat(document.getElementById("shipping").value) || 0;
+  const exchangeRate = parseFloat(document.getElementById("exchangeRate").value) || 0;
+
+  const duty = parseFloat(document.getElementById("duty").value) || 0;
+  const clearance = parseFloat(document.getElementById("clearance").value) || 0;
+  const bankCharges = parseFloat(document.getElementById("bankCharges").value) || 0;
+  const others = parseFloat(document.getElementById("others").value) || 0;
+
+  const totalForeign = price + packing + shipping;
+  const totalINR = totalForeign * exchangeRate;
+  const landingINR = totalINR + duty + clearance + bankCharges + others;
+
+  document.getElementById("resultDisplay").innerText =
+    `📊 Total Cost (${currency}): ${totalForeign.toLocaleString('en-US', {minimumFractionDigits: 2})}\n` +
+    `🎯 Landing Cost (INR): ₹${landingINR.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+
+  // Breakdown details
+  const breakdownText =
+    `💱 Foreign Cost × Exchange Rate = INR\n` +
+    `(${price} + ${packing} + ${shipping}) × ${exchangeRate.toFixed(4)} = ₹${totalINR.toLocaleString('en-IN', {minimumFractionDigits: 2})}\n\n` +
+    `➕ Add Duty, Clearance, Bank Charges, Others\n` +
+    `₹${totalINR.toLocaleString('en-IN')} + ₹${duty} + ₹${clearance} + ₹${bankCharges} + ₹${others}\n\n` +
+    `🎯 Final Landing Cost = ₹${landingINR.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+
+  document.getElementById("breakdownDetails").innerText = breakdownText;
+}
