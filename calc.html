@@ -3,115 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
   <script src="exchange-rate-loader.js"></script>
   <title>XCHANGE</title>
-
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      background: linear-gradient(135deg, #fff3e6, #fbe8d2);
-      margin: 0;
-      padding: 2rem;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-    }
-
-    .form-wrapper {
-      background: #fff8f2;
-      padding: 2rem 2.5rem;
-      border-radius: 12px;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-      max-width: 600px;
-      width: 100%;
-      animation: fadeInUp 1s ease-out;
-    }
-
-    @keyframes fadeInUp {
-      from { transform: translateY(30px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    h2 {
-      text-align: center;
-      color: #5a4632;
-      margin-bottom: 1.5rem;
-    }
-
-    label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: 500;
-      color: #4b3b2e;
-    }
-
-    input, select {
-      padding: 0.6rem;
-      margin-top: 0.3rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
-    }
-
-    input[readonly] {
-      background-color: #f0f0f0;
-      color: #555;
-      cursor: not-allowed;
-    }
-
-    .form-section {
-      margin-bottom: 1.5rem;
-    }
-
-    .two-column {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .column {
-      flex: 1;
-    }
-
-    @media (max-width: 600px) {
-      .two-column {
-        flex-direction: column;
-      }
-    }
-
-    .calculate-btn {
-      background: #d9a066;
-      color: #fff;
-      border: none;
-      padding: 0.8rem 1.2rem;
-      border-radius: 10px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: 0.3s ease;
-      width: 100%;
-      margin-top: 1rem;
-    }
-
-    .calculate-btn:hover {
-      background: #c97c5d;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-
-    .result {
-      margin-top: 1.5rem;
-      font-weight: 600;
-      color: #5a4632;
-      font-size: 1.1rem;
-      white-space: pre-line;
-    }
-
-    /* Custom widths */
-    #currencySelector { width: 75%; }
-    #price { width: 50%; }
-    #packing { width: 70%; }
-    #shipping { width: 70%; }
-    #exchangeRate { width: 80%; }
-  </style>
 </head>
+  
 <body onload="loadExchangeRates()">
   <div class="form-wrapper">
     <h2>ISTOS | Instruments</h2>
