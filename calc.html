@@ -4,23 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
-  <script src="exchange-rate-loader.js"></script>
+  <script src="exchange-rate-loader.js" defer></script>
+  <script src="main.js" defer></script>
   <title>XCHANGE</title>
 </head>
   
-<body onload="loadExchangeRates()">
+<body>
   <div class="form-wrapper">
     <h2>ISTOS | Instruments</h2>
 
+    <!-- Currency Selector -->
     <div class="form-section">
       <label>🌍 Select Currency</label>
-      <select id="currencySelector" onchange="updateCurrency()">
+      <select id="currencySelector">
         <option value="USD">USD 💵</option>
         <option value="GBP">GBP 💷</option>
         <option value="EUR" selected>EUR 💶</option>
       </select>
     </div>
 
+    <!-- Foreign Costs -->
     <div class="form-section">
       <label id="priceLabel">💵 Instrument Price (USD)</label>
       <input type="number" id="price" placeholder="e.g. 16500" />
@@ -32,6 +35,7 @@
       <input type="number" id="shipping" placeholder="e.g. 800" />
     </div>
 
+    <!-- Exchange Rates -->
     <div class="form-section">
       <label>💱 Live Exchange Rate (INR)</label>
       <input type="number" id="exchangeRate" readonly />
@@ -41,6 +45,7 @@
       <input type="number" id="bankRate" readonly />
     </div>
 
+    <!-- INR Costs -->
     <div class="form-section two-column">
       <div class="column">
         <label>🧾 Duty (INR)</label>
@@ -59,60 +64,13 @@
       </div>
     </div>
 
-    <button class="calculate-btn" onclick="calculateLanding()">✨ Calculate Landing Cost</button>
+    <!-- Action Buttons -->
+    <button class="calculate-btn" id="calcBtn">✨ Calculate Landing Cost</button>
+    <button class="breakdown-toggle" id="breakdownBtn">📊 View Breakdown</button>
 
+    <!-- Results -->
     <div class="result" id="resultDisplay"></div>
+    <div id="breakdownDetails" class="breakdown-box" style="display: none;"></div>
   </div>
-
-  <script>
-    // Currency-specific emojis
-    const currencyEmojis = {
-      USD: "💵",
-      GBP: "💷",
-      EUR: "💶"
-    };
-
-    function updateCurrency() {
-      const currency = document.getElementById("currencySelector").value;
-      const emoji = currencyEmojis[currency] || "💵";
-
-      // Update labels dynamically
-      document.getElementById("priceLabel").innerText = `${emoji} Instrument Price (${currency})`;
-      document.getElementById("packingLabel").innerText = `📦 Packing Price (${currency})`;
-      document.getElementById("shippingLabel").innerText = `🚚 Shipping Cost (${currency})`;
-
-      // Auto-populate exchange rate from Google Sheet loader
-      const rate = exchangeRates[currency] || 0;
-      document.getElementById("exchangeRate").value = rate.toFixed(4);
-
-      // Auto-calculate Bank Rate (Live × 1.02)
-      document.getElementById("bankRate").value = (rate * 1.02).toFixed(4);
-    }
-
-    function calculateLanding() {
-      const currency = document.getElementById("currencySelector").value;
-      const price = parseFloat(document.getElementById("price").value) || 0;
-      const packing = parseFloat(document.getElementById("packing").value) || 0;
-      const shipping = parseFloat(document.getElementById("shipping").value) || 0;
-      const exchangeRate = parseFloat(document.getElementById("exchangeRate").value) || 0;
-
-      const duty = parseFloat(document.getElementById("duty").value) || 0;
-      const clearance = parseFloat(document.getElementById("clearance").value) || 0;
-      const bankCharges = parseFloat(document.getElementById("bankCharges").value) || 0;
-      const others = parseFloat(document.getElementById("others").value) || 0;
-
-      const totalForeign = price + packing + shipping;
-      const totalINR = totalForeign * exchangeRate;
-      const landingINR = totalINR + duty + clearance + bankCharges + others;
-
-      document.getElementById("resultDisplay").innerText =
-        `📊 Total Cost (${currency}): ${totalForeign.toLocaleString('en-US', {minimumFractionDigits: 2})}\n` +
-        `🎯 Landing Cost (INR): ₹${landingINR.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
-    }
-  </script>
-
-      <button class="breakdown-toggle" onclick="toggleBreakdown()">📊 View Breakdown</button>
-      <div id="breakdownDetails" class="breakdown-box" style="display: none;"></div>
-
 </body>
 </html>
