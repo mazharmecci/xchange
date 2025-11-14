@@ -122,3 +122,31 @@ input[readonly] {
 #shipping { width: 70%; }
 #exchangeRate,
 #bankRate { width: 80%; }
+
+.breakdown-toggle {
+  background: #f0e6d8;
+  color: #4b3b2e;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background 0.3s ease;
+}
+
+.breakdown-toggle:hover {
+  background: #e2d2c0;
+}
+
+.breakdown-box {
+  margin-top: 1rem;
+  background: #fff8f2;
+  border-left: 4px solid #d9a066;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #5a4632;
+  white-space: pre-line;
+  animation: fadeInUp 0.5s ease-out;
+}
