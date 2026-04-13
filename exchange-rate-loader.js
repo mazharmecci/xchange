@@ -1,30 +1,45 @@
+// exchange-rate-loader.js
 let exchangeRates = {};
 
 const sheetURL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRkQQEIXxm-NcZ0KOeac1vvpDCOivnL_BRFKvktxsmroOda6p7wiliFm80nAycgGGJe6Zzo2JqPOXfK/pub?gid=0&single=true&output=csv";
 
-function loadExchangeRates() {
+/**
+ * Load exchange rates from Google Sheet (CSV).
+ * Returns a Promise that resolves with {USD: rate, GBP: rate, EUR: rate}.
+ */
+async function loadExchangeRates() {
   setStatus("⏳ Fetching rate…");
 
-  fetch(sheetURL)
-    .then((response) => response.text())
-    .then((data) => {
-      parseExchangeRates(data);
+  try {
+    const response = await fetch(sheetURL);
+    const csvData = await response.text();
 
-      // Default currency
-      document.getElementById("currencySelector").value = "EUR";
+    parseExchangeRates(csvData);
+
+    // Default currency selection
+    const selector = document.getElementById("currencySelector");
+    if (selector) {
+      selector.value = "EUR";
       updateCurrency();
+    }
 
-      // Timestamp
-      const formatted = formatTimestamp(new Date());
-      setStatus(`✅ Rate synced from Google Sheet\n🕒 Last synced: ${formatted}`);
-    })
-    .catch((error) => {
-      console.error("Error loading exchange rates:", error);
-      setStatus("❌ Failed to fetch rate");
-    });
+    // Timestamp
+    const formatted = formatTimestamp(new Date());
+    setStatus(`✅ Rate synced from Google Sheet\n🕒 Last synced: ${formatted}`);
+
+    return exchangeRates;
+  } catch (error) {
+    console.error("Error loading exchange rates:", error);
+    setStatus("❌ Failed to fetch rate");
+    return exchangeRates; // return whatever we have (possibly empty)
+  }
 }
 
+/**
+ * Parse CSV data into exchangeRates object.
+ * Expected columns: ... , Currency (col 3), Rate (col 4)
+ */
 function parseExchangeRates(csvData) {
   const rows = csvData.split("\n");
   rows.forEach((row) => {
@@ -50,5 +65,8 @@ function formatTimestamp(date) {
 }
 
 function setStatus(message) {
-  document.getElementById("rateStatus").innerText = message;
+  const statusBox = document.getElementById("rateStatus");
+  if (statusBox) {
+    statusBox.innerText = message;
+  }
 }
