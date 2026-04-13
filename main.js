@@ -1,4 +1,7 @@
 // main.js
+// Global store for exchange rates
+let exchangeRates = {};
+
 // Currency-specific emojis
 const currencyEmojis = {
   USD: "💵",
@@ -6,16 +9,10 @@ const currencyEmojis = {
   EUR: "💶"
 };
 
-// Exchange rates will be loaded from exchange-rate-loader.js
-let exchangeRates = {};
-
-// Initialize app
-document.addEventListener("DOMContentLoaded", () => {
-  // Load exchange rates
-  loadExchangeRates().then(rates => {
-    exchangeRates = rates;
-    updateCurrency(); // set defaults
-  });
+document.addEventListener("DOMContentLoaded", async () => {
+  // Load exchange rates from Google Sheet
+  exchangeRates = await loadExchangeRates();
+  updateCurrency();
 
   // Event listeners
   document.getElementById("currencySelector").addEventListener("change", updateCurrency);
