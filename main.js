@@ -1,3 +1,4 @@
+// main.js
 // Currency-specific emojis
 const currencyEmojis = {
   USD: "💵",
@@ -5,9 +6,16 @@ const currencyEmojis = {
   EUR: "💶"
 };
 
+// Exchange rates will be loaded from exchange-rate-loader.js
+let exchangeRates = {};
+
+// Initialize app
 document.addEventListener("DOMContentLoaded", () => {
-  // Load exchange rates when page is ready
-  loadExchangeRates();
+  // Load exchange rates
+  loadExchangeRates().then(rates => {
+    exchangeRates = rates;
+    updateCurrency(); // set defaults
+  });
 
   // Event listeners
   document.getElementById("currencySelector").addEventListener("change", updateCurrency);
@@ -15,21 +23,23 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("breakdownBtn").addEventListener("click", toggleBreakdown);
 });
 
+// Update labels and exchange rate when currency changes
 function updateCurrency() {
   const currency = document.getElementById("currencySelector").value;
   const emoji = currencyEmojis[currency] || "💵";
 
-  // Update labels dynamically
+  // Dynamic labels
   document.getElementById("priceLabel").innerText = `${emoji} Instrument Price (${currency})`;
   document.getElementById("packingLabel").innerText = `📦 Packing Price (${currency})`;
   document.getElementById("shippingLabel").innerText = `🚚 Shipping Cost (${currency})`;
 
-  // Auto-populate exchange rate
+  // Auto-populate exchange rate and bank rate
   const rate = exchangeRates[currency];
   document.getElementById("exchangeRate").value = rate ? rate.toFixed(4) : "";
   document.getElementById("bankRate").value = rate ? (rate * 1.02).toFixed(4) : "";
 }
 
+// Calculate landing cost in INR
 function calculateLanding() {
   const currency = document.getElementById("currencySelector").value;
 
@@ -66,6 +76,7 @@ function calculateLanding() {
   document.getElementById("breakdownDetails").style.display = "none"; // collapse on new calc
 }
 
+// Toggle breakdown visibility
 function toggleBreakdown() {
   const box = document.getElementById("breakdownDetails");
   const btn = document.getElementById("breakdownBtn");
