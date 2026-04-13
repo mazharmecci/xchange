@@ -1,81 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Landing Cost Calculator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h2>Landing Cost Calculator</h2>
+// main.js
 
-  <!-- Instrument Name -->
-  <div class="section">
-    <label for="instrumentName">📝 Instrument Name</label>
-    <input type="text" id="instrumentName" placeholder="Enter instrument name">
-  </div>
+// When the page loads, fetch rates and wire up UI
+window.addEventListener("DOMContentLoaded", async () => {
+  // Load exchange rates from Google Sheet (function comes from exchange-rate-loader.js)
+  const rates = await loadExchangeRates();
 
-  <!-- Currency Selector -->
-  <div class="section">
-    <label for="currencySelector">Select Currency:</label>
-    <select id="currencySelector">
-      <option value="USD">USD 💵</option>
-      <option value="GBP">GBP 💷</option>
-      <option value="EUR">EUR 💶</option>
-    </select>
-    <div id="rateStatus" style="margin-top:10px; font-size:0.9rem; color:#555;"></div>
-  </div>
+  const currencySelector = document.getElementById("currencySelector");
+  const exchangeRateInput = document.getElementById("exchangeRate");
+  const bankRateInput = document.getElementById("bankRate");
+  const calcBtn = document.getElementById("calcBtn");
+  const breakdownBtn = document.getElementById("breakdownBtn");
+  const resultDisplay = document.getElementById("resultDisplay");
+  const breakdownDetails = document.getElementById("breakdownDetails");
 
-  <!-- Foreign Costs -->
-  <div class="section">
-    <label id="priceLabel" for="price">Instrument Price</label>
-    <input type="number" id="price" placeholder="💵 Enter price">
+  function updateRates() {
+    const currency = currencySelector.value;
+    const rate = rates[currency];
+    if (!rate) return;
 
-    <label id="packingLabel" for="packing">Packing Price</label>
-    <input type="number" id="packing" placeholder="📦 Enter packing cost">
+    exchangeRateInput.value = rate.toFixed(4);
+    bankRateInput.value = (rate * 1.02).toFixed(4); // simple markup
+  }
 
-    <label id="shippingLabel" for="shipping">Shipping Cost</label>
-    <input type="number" id="shipping" placeholder="🚚 Enter shipping cost">
-  </div>
+  currencySelector.addEventListener("change", updateRates);
+  updateRates();
 
-  <!-- Exchange Rates -->
-  <div class="section">
-    <label for="exchangeRate">Exchange Rate</label>
-    <input type="number" id="exchangeRate" readonly>
+  calcBtn.addEventListener("click", () => {
+    const price = Number(document.getElementById("price").value || 0);
+    const packing = Number(document.getElementById("packing").value || 0);
+    const shipping = Number(document.getElementById("shipping").value || 0);
+    const duty = Number(document.getElementById("duty").value || 0);
+    const clearance = Number(document.getElementById("clearance").value || 0);
+    const bankCharges = Number(document.getElementById("bankCharges").value || 0);
+    const others = Number(document.getElementById("others").value || 0);
+    const rate = Number(bankRateInput.value || exchangeRateInput.value || 0);
 
-    <label for="bankRate">Bank Rate</label>
-    <input type="number" id="bankRate" readonly>
-  </div>
+    const foreignTotal = price + packing + shipping;
+    const inrBase = foreignTotal * rate;
+    const inrExtras = duty + clearance + bankCharges + others;
+    const landedCost = inrBase + inrExtras;
 
-  <!-- INR Costs -->
-  <div class="section">
-    <label for="duty">Duty</label>
-    <input type="number" id="duty" placeholder="🧾 Enter duty">
+    resultDisplay.textContent = `💰 Total Landed Cost (INR): ${landedCost.toFixed(2)}`;
 
-    <label for="clearance">Clearance</label>
-    <input type="number" id="clearance" placeholder="📑 Enter clearance cost">
+    breakdownDetails.textContent =
+      `Foreign total: ${foreignTotal.toFixed(2)}\n` +
+      `Rate used: ${rate.toFixed(4)}\n` +
+      `INR base: ${inrBase.toFixed(2)}\n` +
+      `INR extras: ${inrExtras.toFixed(2)}\n`;
+  });
 
-    <label for="bankCharges">Bank Charges</label>
-    <input type="number" id="bankCharges" placeholder="🏦 Enter bank charges">
-
-    <label for="others">Others</label>
-    <input type="number" id="others" placeholder="➕ Enter other costs">
-  </div>
-
-  <!-- Action Buttons -->
-  <div class="section">
-    <button id="calcBtn">Calculate</button>
-    <button id="breakdownBtn">📊 View Breakdown</button>
-  </div>
-
-  <!-- Results -->
-  <div class="section">
-    <pre id="resultDisplay"></pre>
-    <pre id="breakdownDetails" style="display:none;"></pre>
-  </div>
-
-  <!-- Scripts -->
-  <script src="exchange-rate-loader.js"></script>
-  <script src="main.js"></script>
-</body>
-</html>
+  breakdownBtn.addEventListener("click", () => {
+    breakdownDetails.style.display =
+      breakdownDetails.style.display === "none" ? "block" : "none";
+  });
+});
