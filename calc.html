@@ -1,77 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
-  <!-- Scripts: loader first, then UI logic -->
+  <meta charset="UTF-8">
+  <title>Landing Cost Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Landing Cost Calculator</h2>
+
+  <!-- Currency Selector -->
+  <div class="section">
+    <label for="currencySelector">Select Currency:</label>
+    <select id="currencySelector">
+      <option value="USD">USD 💵</option>
+      <option value="GBP">GBP 💷</option>
+      <option value="EUR">EUR 💶</option>
+    </select>
+  </div>
+
+  <!-- Foreign Costs -->
+  <div class="section">
+    <label id="priceLabel" for="price">💵 Instrument Price</label>
+    <input type="number" id="price" value="0">
+
+    <label id="packingLabel" for="packing">📦 Packing Price</label>
+    <input type="number" id="packing" value="0">
+
+    <label id="shippingLabel" for="shipping">🚚 Shipping Cost</label>
+    <input type="number" id="shipping" value="0">
+  </div>
+
+  <!-- Exchange Rates -->
+  <div class="section">
+    <label for="exchangeRate">Exchange Rate</label>
+    <input type="number" id="exchangeRate" readonly>
+
+    <label for="bankRate">Bank Rate</label>
+    <input type="number" id="bankRate" readonly>
+  </div>
+
+  <!-- INR Costs -->
+  <div class="section">
+    <label for="duty">🧾 Duty</label>
+    <input type="number" id="duty" value="0">
+
+    <label for="clearance">📑 Clearance</label>
+    <input type="number" id="clearance" value="0">
+
+    <label for="bankCharges">🏦 Bank Charges</label>
+    <input type="number" id="bankCharges" value="0">
+
+    <label for="others">➕ Others</label>
+    <input type="number" id="others" value="0">
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="section">
+    <button id="calcBtn">Calculate</button>
+    <button id="breakdownBtn">📊 View Breakdown</button>
+  </div>
+
+  <!-- Results -->
+  <div class="section">
+    <pre id="resultDisplay"></pre>
+    <pre id="breakdownDetails" style="display:none;"></pre>
+  </div>
+
+  <!-- Scripts -->
   <script src="exchange-rate-loader.js"></script>
   <script src="main.js"></script>
-  <title>XCHANGE</title>
-</head>
-  
-<body>
-  <div class="form-wrapper">
-    <h2>ISTOS | Instruments</h2>
-
-    <!-- Currency Selector -->
-    <div class="form-section">
-      <label>🌍 Select Currency</label>
-      <select id="currencySelector">
-        <option value="USD">USD 💵</option>
-        <option value="GBP">GBP 💷</option>
-        <option value="EUR" selected>EUR 💶</option>
-      </select>
-    </div>
-
-    <!-- Foreign Costs -->
-    <div class="form-section">
-      <label id="priceLabel">💵 Instrument Price (USD)</label>
-      <input type="number" id="price" placeholder="e.g. 16500" />
-
-      <label id="packingLabel">📦 Packing Price (USD)</label>
-      <input type="number" id="packing" placeholder="e.g. 56.35" />
-
-      <label id="shippingLabel">🚚 Shipping Cost (USD)</label>
-      <input type="number" id="shipping" placeholder="e.g. 800" />
-    </div>
-
-    <!-- Exchange Rates -->
-    <div class="form-section">
-      <label>💱 Live Exchange Rate (INR)</label>
-      <input type="number" id="exchangeRate" readonly />
-      <div id="rateStatus" class="status-badge">⏳ Fetching rate…</div>
-
-      <label>🏦 Bank Rate (INR)</label>
-      <input type="number" id="bankRate" readonly />
-    </div>
-
-    <!-- INR Costs -->
-    <div class="form-section two-column">
-      <div class="column">
-        <label>🧾 Duty (INR)</label>
-        <input type="number" id="duty" placeholder="e.g. 154012.24" />
-
-        <label>💳 Bank Charges (INR)</label>
-        <input type="number" id="bankCharges" placeholder="e.g. 7000" />
-      </div>
-
-      <div class="column">
-        <label>🏛️ Clearance (INR)</label>
-        <input type="number" id="clearance" placeholder="e.g. 30000" />
-
-        <label>⚙️ Others (INR)</label>
-        <input type="number" id="others" placeholder="e.g. 15000" />
-      </div>
-    </div>
-
-    <!-- Action Buttons -->
-    <button class="calculate-btn" id="calcBtn">✨ Calculate Landing Cost</button>
-    <button class="breakdown-toggle" id="breakdownBtn">📊 View Breakdown</button>
-
-    <!-- Results -->
-    <div class="result" id="resultDisplay"></div>
-    <div id="breakdownDetails" class="breakdown-box" style="display: none;"></div>
-  </div>
 </body>
 </html>
