@@ -1,92 +1,81 @@
-// main.js
-let exchangeRates = {};
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Landing Cost Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Landing Cost Calculator</h2>
 
-const currencyEmojis = {
-  USD: "💵",
-  GBP: "💷",
-  EUR: "💶"
-};
+  <!-- Instrument Name -->
+  <div class="section">
+    <label for="instrumentName">📝 Instrument Name</label>
+    <input type="text" id="instrumentName" placeholder="Enter instrument name">
+  </div>
 
-document.addEventListener("DOMContentLoaded", async () => {
-  exchangeRates = await loadExchangeRates();
-  updateCurrency();
+  <!-- Currency Selector -->
+  <div class="section">
+    <label for="currencySelector">Select Currency:</label>
+    <select id="currencySelector">
+      <option value="USD">USD 💵</option>
+      <option value="GBP">GBP 💷</option>
+      <option value="EUR">EUR 💶</option>
+    </select>
+    <div id="rateStatus" style="margin-top:10px; font-size:0.9rem; color:#555;"></div>
+  </div>
 
-  document.getElementById("currencySelector").addEventListener("change", updateCurrency);
-  document.getElementById("calcBtn").addEventListener("click", calculateLanding);
-  document.getElementById("breakdownBtn").addEventListener("click", toggleBreakdown);
-});
+  <!-- Foreign Costs -->
+  <div class="section">
+    <label id="priceLabel" for="price">Instrument Price</label>
+    <input type="number" id="price" placeholder="💵 Enter price">
 
-function updateCurrency() {
-  const currency = document.getElementById("currencySelector").value;
-  const emoji = currencyEmojis[currency] || "💵";
+    <label id="packingLabel" for="packing">Packing Price</label>
+    <input type="number" id="packing" placeholder="📦 Enter packing cost">
 
-  // Update labels
-  document.getElementById("priceLabel").innerText = `${emoji} Instrument Price (${currency})`;
-  document.getElementById("packingLabel").innerText = `📦 Packing Price (${currency})`;
-  document.getElementById("shippingLabel").innerText = `🚚 Shipping Cost (${currency})`;
+    <label id="shippingLabel" for="shipping">Shipping Cost</label>
+    <input type="number" id="shipping" placeholder="🚚 Enter shipping cost">
+  </div>
 
-  // Add currency symbol to input placeholders
-  ["price", "packing", "shipping", "duty", "clearance", "bankCharges", "others"].forEach(id => {
-    const input = document.getElementById(id);
-    if (input) input.placeholder = `${emoji} Enter ${id}`;
-  });
+  <!-- Exchange Rates -->
+  <div class="section">
+    <label for="exchangeRate">Exchange Rate</label>
+    <input type="number" id="exchangeRate" readonly>
 
-  // Exchange rate fields stay numeric only
-  const rate = exchangeRates[currency];
-  document.getElementById("exchangeRate").value = rate ? rate.toFixed(4) : "";
-  document.getElementById("bankRate").value = rate ? (rate * 1.02).toFixed(4) : "";
-}
+    <label for="bankRate">Bank Rate</label>
+    <input type="number" id="bankRate" readonly>
+  </div>
 
-function calculateLanding() {
-  const currency = document.getElementById("currencySelector").value;
-  const instrumentName = document.getElementById("instrumentName").value || "Unnamed Instrument";
+  <!-- INR Costs -->
+  <div class="section">
+    <label for="duty">Duty</label>
+    <input type="number" id="duty" placeholder="🧾 Enter duty">
 
-  const price = getValue("price");
-  const packing = getValue("packing");
-  const shipping = getValue("shipping");
-  const exchangeRate = getValue("exchangeRate");
+    <label for="clearance">Clearance</label>
+    <input type="number" id="clearance" placeholder="📑 Enter clearance cost">
 
-  const duty = getValue("duty");
-  const clearance = getValue("clearance");
-  const bankCharges = getValue("bankCharges");
-  const others = getValue("others");
+    <label for="bankCharges">Bank Charges</label>
+    <input type="number" id="bankCharges" placeholder="🏦 Enter bank charges">
 
-  const totalForeign = price + packing + shipping;
-  const totalINR = totalForeign * exchangeRate;
-  const landingINR = totalINR + duty + clearance + bankCharges + others;
+    <label for="others">Others</label>
+    <input type="number" id="others" placeholder="➕ Enter other costs">
+  </div>
 
-  document.getElementById("resultDisplay").innerText =
-    `📝 Instrument: ${instrumentName}\n` +
-    `📊 Total Cost (${currency}): ${formatNumber(totalForeign)}\n` +
-    `🎯 Landing Cost (INR): ₹${formatNumber(landingINR, "en-IN")}`;
+  <!-- Action Buttons -->
+  <div class="section">
+    <button id="calcBtn">Calculate</button>
+    <button id="breakdownBtn">📊 View Breakdown</button>
+  </div>
 
-  const breakdownText =
-    `💱 Foreign Cost × Exchange Rate = INR\n` +
-    `(${price} + ${packing} + ${shipping}) × ${exchangeRate.toFixed(4)} = ₹${formatNumber(totalINR, "en-IN")}\n\n` +
-    `➕ Add Duty, Clearance, Bank Charges, Others\n` +
-    `₹${formatNumber(totalINR, "en-IN")} + ₹${duty} + ₹${clearance} + ₹${bankCharges} + ₹${others}\n\n` +
-    `🎯 Final Landing Cost = ₹${formatNumber(landingINR, "en-IN")}`;
+  <!-- Results -->
+  <div class="section">
+    <pre id="resultDisplay"></pre>
+    <pre id="breakdownDetails" style="display:none;"></pre>
+  </div>
 
-  document.getElementById("breakdownDetails").innerText = breakdownText;
-  document.getElementById("breakdownDetails").style.display = "none";
-}
-
-function toggleBreakdown() {
-  const box = document.getElementById("breakdownDetails");
-  const btn = document.getElementById("breakdownBtn");
-  if (box.style.display === "none") {
-    box.style.display = "block";
-    btn.innerText = "🔽 Hide Breakdown";
-  } else {
-    box.style.display = "none";
-    btn.innerText = "📊 View Breakdown";
-  }
-}
-
-function getValue(id) {
-  return parseFloat(document.getElementById(id).value) || 0;
-}
-
-function formatNumber(num, locale = "en-US") {
-  return num.toLocaleString(locale, { minimumFractionDigits: 2 });
-}
+  <!-- Scripts -->
+  <script src="exchange-rate-loader.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
