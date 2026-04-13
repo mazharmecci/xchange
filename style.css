@@ -1,152 +1,94 @@
-/* Typography and layout */
+/* General layout */
 body {
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  background: linear-gradient(135deg, #fff3e6, #fbe8d2);
+  font-family: "Segoe UI", Arial, sans-serif;
   margin: 0;
-  padding: 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  padding: 0;
+  background: #f5f7fa;
+  color: #333;
 }
 
-.form-wrapper {
-  background: #fff8f2;
-  padding: 2rem 2.5rem;
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
-  width: 100%;
-  animation: fadeInUp 1s ease-out;
-}
-
-@keyframes fadeInUp {
-  from { transform: translateY(30px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
+/* Page title */
 h2 {
   text-align: center;
-  color: #5a4632;
-  margin-bottom: 1.5rem;
+  padding: 20px;
+  margin: 0;
+  background: #0078d7;
+  color: white;
+  font-size: 1.4rem;
 }
 
+/* Section cards */
+.section {
+  background: white;
+  margin: 15px;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Labels and inputs */
 label {
   display: block;
-  margin-top: 1rem;
-  font-weight: 500;
-  color: #4b3b2e;
-}
-
-/* Inputs and selects */
-input,
-select {
-  padding: 0.6rem;
-  margin-top: 0.3rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-  width: 100%;
-}
-
-input[readonly] {
-  background-color: #f0f0f0;
-  color: #555;
-  cursor: not-allowed;
-}
-
-/* Form layout */
-.form-section {
-  margin-bottom: 1.5rem;
-}
-
-.two-column {
-  display: flex;
-  gap: 1rem;
-}
-
-.column {
-  flex: 1;
-}
-
-@media (max-width: 600px) {
-  .two-column {
-    flex-direction: column;
-  }
-}
-
-/* Button styling */
-.calculate-btn {
-  background: #d9a066;
-  color: #fff;
-  border: none;
-  padding: 0.8rem 1.2rem;
-  border-radius: 10px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: 0.3s ease;
-  width: 100%;
-  margin-top: 1rem;
-}
-
-.calculate-btn:hover {
-  background: #c97c5d;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
-
-/* Result display */
-.result {
-  margin-top: 1.5rem;
+  margin-top: 10px;
   font-weight: 600;
-  color: #5a4632;
-  font-size: 1.1rem;
-  white-space: pre-line;
-}
-
-/* Status badge */
-.status-badge {
-  margin-top: 0.3rem;
   font-size: 0.9rem;
-  color: #4b3b2e;
-  background-color: #f0e6d8;
-  padding: 0.4rem 0.8rem;
-  border-radius: 8px;
-  display: inline-block;
-  white-space: pre-line;
-  line-height: 1.4;
 }
 
-/* Custom widths */
-#currencySelector { width: 75%; }
-#price { width: 50%; }
-#packing,
-#shipping { width: 70%; }
-#exchangeRate,
-#bankRate { width: 80%; }
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
 
-.breakdown-toggle {
-  background: #f0e6d8;
-  color: #4b3b2e;
+/* Buttons */
+button {
+  width: 48%;
+  padding: 12px;
+  margin: 5px 1%;
   border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 0.95rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  margin-top: 1rem;
-  transition: background 0.3s ease;
+  transition: background 0.3s;
 }
 
-.breakdown-toggle:hover {
-  background: #e2d2c0;
+#calcBtn {
+  background: #0078d7;
+  color: white;
 }
 
-.breakdown-box {
-  margin-top: 1rem;
-  background: #fff8f2;
-  border-left: 4px solid #d9a066;
-  padding: 1rem;
-  border-radius: 8px;
+#calcBtn:hover {
+  background: #005fa3;
+}
+
+#breakdownBtn {
+  background: #f0f0f0;
+  color: #333;
+}
+
+#breakdownBtn:hover {
+  background: #ddd;
+}
+
+/* Results */
+pre {
+  background: #f9fafb;
+  padding: 12px;
+  border-radius: 6px;
   font-size: 0.95rem;
-  color: #5a4632;
-  white-space: pre-line;
-  animation: fadeInUp 0.5s ease-out;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  button {
+    width: 100%;
+    margin: 8px 0;
+  }
 }
