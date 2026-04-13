@@ -9,6 +9,12 @@
 <body>
   <h2>Landing Cost Calculator</h2>
 
+  <!-- Instrument Name -->
+  <div class="section">
+    <label for="instrumentName">📝 Instrument Name</label>
+    <input type="text" id="instrumentName" placeholder="Enter instrument name">
+  </div>
+
   <!-- Currency Selector -->
   <div class="section">
     <label for="currencySelector">Select Currency:</label>
@@ -23,14 +29,14 @@
 
   <!-- Foreign Costs -->
   <div class="section">
-    <label id="priceLabel" for="price">💵 Instrument Price</label>
-    <input type="number" id="price" value="0">
+    <label id="priceLabel" for="price">Instrument Price</label>
+    <input type="number" id="price" placeholder="💵 Enter price" value="0">
 
-    <label id="packingLabel" for="packing">📦 Packing Price</label>
-    <input type="number" id="packing" value="0">
+    <label id="packingLabel" for="packing">Packing Price</label>
+    <input type="number" id="packing" placeholder="📦 Enter packing cost" value="0">
 
-    <label id="shippingLabel" for="shipping">🚚 Shipping Cost</label>
-    <input type="number" id="shipping" value="0">
+    <label id="shippingLabel" for="shipping">Shipping Cost</label>
+    <input type="number" id="shipping" placeholder="🚚 Enter shipping cost" value="0">
   </div>
 
   <!-- Exchange Rates -->
@@ -44,17 +50,17 @@
 
   <!-- INR Costs -->
   <div class="section">
-    <label for="duty">🧾 Duty</label>
-    <input type="number" id="duty" value="0">
+    <label for="duty">Duty</label>
+    <input type="number" id="duty" placeholder="🧾 Enter duty" value="0">
 
-    <label for="clearance">📑 Clearance</label>
-    <input type="number" id="clearance" value="0">
+    <label for="clearance">Clearance</label>
+    <input type="number" id="clearance" placeholder="📑 Enter clearance cost" value="0">
 
-    <label for="bankCharges">🏦 Bank Charges</label>
-    <input type="number" id="bankCharges" value="0">
+    <label for="bankCharges">Bank Charges</label>
+    <input type="number" id="bankCharges" placeholder="🏦 Enter bank charges" value="0">
 
-    <label for="others">➕ Others</label>
-    <input type="number" id="others" value="0">
+    <label for="others">Others</label>
+    <input type="number" id="others" placeholder="➕ Enter other costs" value="0">
   </div>
 
   <!-- Action Buttons -->
