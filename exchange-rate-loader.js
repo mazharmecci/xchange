@@ -11,8 +11,6 @@ async function loadExchangeRates() {
 
   try {
     const response = await fetch(sheetURL);
-    if (!response.ok) throw new Error("Network response not ok");
-
     const csvData = await response.text();
     const rates = parseExchangeRates(csvData);
 
@@ -26,19 +24,11 @@ async function loadExchangeRates() {
     const formatted = formatTimestamp(new Date());
     setStatus(`✅ Rate synced from Google Sheet\n🕒 Last synced: ${formatted}`);
 
-    // Lock fields since we have live data
-    lockRateFields();
-
     return rates;
   } catch (error) {
     console.error("Error loading exchange rates:", error);
-    setStatus("❌ Failed to fetch rate. Please enter manually.");
-
-    // Unlock fields for manual input
-    unlockRateFields();
-
-    // Provide fallback defaults
-    return { USD: 90, GBP: 120, EUR: 105 };
+    setStatus("❌ Failed to fetch rate");
+    return {};
   }
 }
 
@@ -61,7 +51,6 @@ function parseExchangeRates(csvData) {
 }
 
 /* ---------- Helpers ---------- */
-
 function formatTimestamp(date) {
   return date.toLocaleString("en-IN", {
     day: "2-digit",
@@ -77,16 +66,4 @@ function setStatus(message) {
   if (statusBox) {
     statusBox.innerText = message;
   }
-}
-
-function lockRateFields() {
-  document.getElementById("exchangeRate").readOnly = true;
-  document.getElementById("bankRate").readOnly = true;
-}
-
-function unlockRateFields() {
-  document.getElementById("exchangeRate").readOnly = false;
-  document.getElementById("bankRate").readOnly = false;
-  document.getElementById("exchangeRate").placeholder = "Enter rate manually";
-  document.getElementById("bankRate").placeholder = "Enter bank rate manually";
 }
