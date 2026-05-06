@@ -44,7 +44,8 @@
       <label id="totalForeignLabel" for="totalForeign">🌐 Total Foreign Cost</label>
       <input type="text" id="totalForeign" readonly>
     </div>
-  
+  </div>
+
   <!-- Exchange Rates -->
   <div class="section grid-2">
     <div>
@@ -81,17 +82,18 @@
     </div>
   </div>
 
-  <!-- Action Buttons -->
-  <div class="section grid-2">
+  <!-- Action Buttons - Only Calculate now -->
+  <div class="section grid-1">
     <button id="calcBtn">Calculate</button>
-    <button id="breakdownBtn">📊 View Breakdown</button>
   </div>
 
   <!-- Results -->
   <div class="section grid-1">
     <pre id="resultDisplay"></pre>
+    <button id="breakdownBtn">📊 View Breakdown</button>
     <pre id="breakdownDetails" style="display:none;"></pre>
   </div>
+</body>
 
   <!-- Scripts -->
   <script src="exchange-rate-loader.js"></script>
