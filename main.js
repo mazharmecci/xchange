@@ -8,10 +8,10 @@ const currencyEmojis = {
   EUR: "💶",
 };
 
-const moneyFields = ["price", "packing", "shipping", "duty", "clearance", "bankCharges", "others"];
+// Removed "duty" from moneyFields because it's now percentage-based
+const moneyFields = ["price", "packing", "shipping", "clearance", "bankCharges", "others"];
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // Load exchange rates from Google Sheet (defined in exchange-rate-loader.js)
   try {
     exchangeRates = await loadExchangeRates();
   } catch (err) {
@@ -48,12 +48,11 @@ function updateCurrency() {
   setText("packingLabel", `📦 Packing Price (${currency})`);
   setText("shippingLabel", `🚚 Shipping Cost (${currency})`);
 
-  // Placeholders (friendly text, not raw IDs)
+  // Placeholders
   const placeholders = {
     price: "price",
     packing: "packing cost",
     shipping: "shipping cost",
-    duty: "duty",
     clearance: "clearance cost",
     bankCharges: "bank charges",
     others: "other costs",
@@ -71,7 +70,7 @@ function updateCurrency() {
 
   if (rate && ex && bank) {
     ex.value = rate.toFixed(4);
-    bank.value = (rate * 1.02).toFixed(4); // simple markup
+    bank.value = (rate * 1.02).toFixed(4);
   } else {
     if (ex) ex.value = "";
     if (bank) bank.value = "";
@@ -83,6 +82,9 @@ function resetFields() {
     const input = byId(id);
     if (input) input.value = "";
   });
+
+  const dutyPercent = byId("dutyPercent");
+  if (dutyPercent) dutyPercent.value = "";
 
   const resultDisplay = byId("resultDisplay");
   const breakdownDetails = byId("breakdownDetails");
@@ -105,16 +107,17 @@ function calculateLanding() {
   const price = numberOf("price");
   const packing = numberOf("packing");
   const shipping = numberOf("shipping");
-  const duty = numberOf("duty");
   const clearance = numberOf("clearance");
   const bankCharges = numberOf("bankCharges");
   const others = numberOf("others");
 
+  const dutyPercent = numberOf("dutyPercent"); // percentage input
   const exchangeRate = numberOf("bankRate") || numberOf("exchangeRate") || 0;
 
   const totalForeign = price + packing + shipping;
   const totalINR = totalForeign * exchangeRate;
-  const landingINR = totalINR + duty + clearance + bankCharges + others;
+  const dutyValue = (totalINR * dutyPercent) / 100; // duty as % of INR
+  const landingINR = totalINR + dutyValue + clearance + bankCharges + others;
 
   const resultLines = [
     `📝 Instrument: ${instrumentName || "Unnamed Instrument"}`,
@@ -126,8 +129,8 @@ function calculateLanding() {
     "💱 Foreign Cost × Exchange Rate = INR",
     `(${price} + ${packing} + ${shipping}) × ${exchangeRate.toFixed(4)} = ₹${formatNumber(totalINR, "en-IN")}`,
     "",
-    "➕ Add Duty, Clearance, Bank Charges, Others",
-    `₹${formatNumber(totalINR, "en-IN")} + ₹${duty} + ₹${clearance} + ₹${bankCharges} + ₹${others}`,
+    `➕ Add Duty (${dutyPercent}% of INR), Clearance, Bank Charges, Others`,
+    `₹${formatNumber(totalINR, "en-IN")} + ₹${formatNumber(dutyValue, "en-IN")} + ₹${clearance} + ₹${bankCharges} + ₹${others}`,
     "",
     `🎯 Final Landing Cost = ₹${formatNumber(landingINR, "en-IN")}`,
   ];
