@@ -116,9 +116,15 @@ function updateTotalForeign() {
   const shipping = numberOf("shipping");
   const totalForeign = price + packing + shipping;
 
-  const totalField = byId("totalForeign");
-  if (totalField) totalField.value = formatNumber(totalForeign);
+  setValue("totalForeign", formatNumber(totalForeign)); // use helper
 }
+
+// Attach listeners once DOM is ready
+["price", "packing", "shipping"].forEach(id => {
+  const input = byId(id);
+  if (input) input.addEventListener("input", updateTotalForeign);
+});
+
 
 /* ---------- Core calculation ---------- */
 
