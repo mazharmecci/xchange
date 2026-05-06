@@ -11,15 +11,16 @@ body {
 /* Main grid layout with top-right rates */
 .main-grid {
   display: grid;
-  grid-template-columns: 1fr 280px; /* Main content + rates column */
+  /* make left area a bit wider and right slightly narrower */
+  grid-template-columns: minmax(0, 1.3fr) 260px; /* was: 1fr 280px */
   grid-template-rows: auto 1fr;
   grid-template-areas: 
     "header rates"
-    "form form";
-  gap: 20px;
-  max-width: 1400px;
+    "form   rates";      /* was: "form form" */
+  gap: 16px;             /* was: 20px */
+  max-width: 1150px;     /* was: 1400px */
   margin: 0 auto;
-  padding: 20px;
+  padding: 16px 20px;    /* was: 20px */
 }
 
 header { grid-area: header; }
@@ -75,7 +76,7 @@ h2 {
 /* Section cards */
 .section {
   background: white;
-  margin: 15px 0;
+  margin: 15px 0;        /* keep vertical-only margin (no left/right) */
   padding: 18px;
   border-radius: 10px;
   box-shadow: 0 3px 8px rgba(0,0,0,0.08);
@@ -210,6 +211,7 @@ input[readonly]:focus {
       "header"
       "rates"
       "form";
+    max-width: 100%;
   }
   .rates {
     max-width: 400px;
