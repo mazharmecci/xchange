@@ -51,6 +51,7 @@ function updateCurrency() {
   setText("priceLabel", `${emoji} Instrument Price (${currency})`);
   setText("packingLabel", `📦 Packing Price (${currency})`);
   setText("shippingLabel", `🚚 Shipping Cost (${currency})`);
+  setText("totalForeignLabel", `🌐 Total Foreign Cost (${currency})`);
 
   // Placeholders
   const placeholders = {
