@@ -117,16 +117,9 @@ function updateTotalForeign() {
   const shipping = numberOf("shipping");
   const totalForeign = price + packing + shipping;
 
-  // For input fields, use plain number (no commas)
-  setValue("totalForeign", totalForeign);
+  // Show formatted value with commas in readonly text field
+  setValue("totalForeign", formatNumber(totalForeign));
 }
-
-// Attach listeners once DOM is ready
-["price", "packing", "shipping"].forEach(id => {
-  const input = byId(id);
-  if (input) input.addEventListener("input", updateTotalForeign);
-});
-
 
 /* ---------- Core calculation ---------- */
 
