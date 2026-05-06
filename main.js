@@ -1,5 +1,3 @@
-// main.js
-
 let exchangeRates = {};
 
 const currencyEmojis = {
@@ -32,6 +30,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (calcBtn) calcBtn.addEventListener("click", calculateLanding);
   if (breakdownBtn) breakdownBtn.addEventListener("click", toggleBreakdown);
+
+  // Attach listeners to update Total Foreign Cost live
+  ["price", "packing", "shipping"].forEach(id => {
+    const input = byId(id);
+    if (input) input.addEventListener("input", updateTotalForeign);
+  });
 });
 
 /* ---------- UI Updaters ---------- */
@@ -75,6 +79,9 @@ function updateCurrency() {
     if (ex) ex.value = "";
     if (bank) bank.value = "";
   }
+
+  // Refresh total foreign cost display
+  updateTotalForeign();
 }
 
 function resetFields() {
@@ -86,6 +93,9 @@ function resetFields() {
   const dutyPercent = byId("dutyPercent");
   if (dutyPercent) dutyPercent.value = "";
 
+  const totalForeign = byId("totalForeign");
+  if (totalForeign) totalForeign.value = "";
+
   const resultDisplay = byId("resultDisplay");
   const breakdownDetails = byId("breakdownDetails");
   if (resultDisplay) resultDisplay.textContent = "";
@@ -96,6 +106,18 @@ function resetFields() {
 
   const breakdownBtn = byId("breakdownBtn");
   if (breakdownBtn) breakdownBtn.textContent = "📊 View Breakdown";
+}
+
+/* ---------- Foreign Cost updater ---------- */
+
+function updateTotalForeign() {
+  const price = numberOf("price");
+  const packing = numberOf("packing");
+  const shipping = numberOf("shipping");
+  const totalForeign = price + packing + shipping;
+
+  const totalField = byId("totalForeign");
+  if (totalField) totalField.value = formatNumber(totalForeign);
 }
 
 /* ---------- Core calculation ---------- */
@@ -116,12 +138,15 @@ function calculateLanding() {
 
   const totalForeign = price + packing + shipping;
   const totalINR = totalForeign * exchangeRate;
-  const dutyValue = (totalINR * dutyPercent) / 100; // duty as % of INR
+  const dutyValue = (totalINR * dutyPercent) / 100;
   const landingINR = totalINR + dutyValue + clearance + bankCharges + others;
+
+  // Update readonly field
+  setValue("totalForeign", formatNumber(totalForeign));
 
   const resultLines = [
     `📝 Instrument: ${instrumentName || "Unnamed Instrument"}`,
-    `📊 Total Cost (${currency}): ${formatNumber(totalForeign)}`,
+    `📊 Total Foreign Cost (${currency}): ${formatNumber(totalForeign)}`,
     `🎯 Landing Cost (INR): ₹${formatNumber(landingINR, "en-IN")}`,
   ];
 
@@ -129,7 +154,8 @@ function calculateLanding() {
     "💱 Foreign Cost × Exchange Rate = INR",
     `(${price} + ${packing} + ${shipping}) × ${exchangeRate.toFixed(4)} = ₹${formatNumber(totalINR, "en-IN")}`,
     "",
-    `➕ Add Duty (${dutyPercent}% of INR), Clearance, Bank Charges, Others`,
+    `➕ Duty (${dutyPercent}% of INR) = ₹${formatNumber(dutyValue, "en-IN")}`,
+    `➕ Clearance, Bank Charges, Others`,
     `₹${formatNumber(totalINR, "en-IN")} + ₹${formatNumber(dutyValue, "en-IN")} + ₹${clearance} + ₹${bankCharges} + ₹${others}`,
     "",
     `🎯 Final Landing Cost = ₹${formatNumber(landingINR, "en-IN")}`,
@@ -179,6 +205,11 @@ function numberOf(id) {
 function setText(id, text) {
   const el = byId(id);
   if (el) el.textContent = text;
+}
+
+function setValue(id, val) {
+  const el = byId(id);
+  if (el) el.value = val;
 }
 
 function formatNumber(num, locale = "en-US") {
