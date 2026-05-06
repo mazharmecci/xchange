@@ -1,4 +1,3 @@
-// exchange-rate-loader.js
 const sheetURL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRkQQEIXxm-NcZ0KOeac1vvpDCOivnL_BRFKvktxsmroOda6p7wiliFm80nAycgGGJe6Zzo2JqPOXfK/pub?gid=0&single=true&output=csv";
 
@@ -16,7 +15,8 @@ async function loadExchangeRates() {
     const selector = document.getElementById("currencySelector");
     if (selector) selector.value = "EUR";
 
-    setStatus(`✅ Rate synced from Google Sheet\n🕒 Last synced: ${formatTimestamp(new Date())}`);
+    // Removed timestamp/status line
+    setStatus("✅ Rates loaded successfully");
 
     lockRateFields();
     return rates;
