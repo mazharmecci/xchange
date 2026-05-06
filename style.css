@@ -149,3 +149,9 @@ input[readonly]:focus {
   border-radius: 4px;
 }
 
+#totalForeign[readonly] {
+  background: #f0f8ff; /* pastel blue */
+  font-weight: 600;
+  border: 1px solid #b3d4ff;
+}
+
