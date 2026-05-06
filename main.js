@@ -111,13 +111,13 @@ function resetFields() {
 /* ---------- Foreign Cost updater ---------- */
 
 function updateTotalForeign() {
-  const price = numberOf("price");      // safely returns 0 if empty
-  const packing = numberOf("packing");  // safely returns 0 if empty
-  const shipping = numberOf("shipping");// safely returns 0 if empty
-
+  const price = numberOf("price");
+  const packing = numberOf("packing");
+  const shipping = numberOf("shipping");
   const totalForeign = price + packing + shipping;
 
-  setValue("totalForeign", formatNumber(totalForeign));
+  // For input fields, use plain number (no commas)
+  setValue("totalForeign", totalForeign);
 }
 
 // Attach listeners once DOM is ready
