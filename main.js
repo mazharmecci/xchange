@@ -228,25 +228,34 @@ document.addEventListener("DOMContentLoaded", () => {
 async function submitToSheet() {
   const payload = {
     instrumentName: valueOf("instrumentName"),
-    currency: valueOf("currencySelector"),
-    price: numberOf("price"),
-    packing: numberOf("packing"),
-    shipping: numberOf("shipping"),
-    totalForeign: numberOf("totalForeign"),
-    dutyPercent: numberOf("dutyPercent"),
-    clearance: numberOf("clearance"),
-    bankCharges: numberOf("bankCharges"),
-    others: numberOf("others"),
-    landingINR: byId("resultDisplay")?.textContent || ""
+    currency:       valueOf("currencySelector"),
+    price:          numberOf("price"),
+    packing:        numberOf("packing"),
+    shipping:       numberOf("shipping"),
+    totalForeign:   numberOf("totalForeign"),
+    dutyPercent:    numberOf("dutyPercent"),
+    clearance:      numberOf("clearance"),
+    bankCharges:    numberOf("bankCharges"),
+    others:         numberOf("others"),
+    landingINR:     byId("resultDisplay")?.textContent || ""
   };
 
-  try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbxpS7mlS9w0zKAJcEGz3mIX57s3Po_-pHLY93rlJLHP5HrhaWNXv_rpo4o5C0R0f1J8lQ/exec", {
-      method: "POST",
-      body: JSON.stringify(payload),
-      headers: { "Content-Type": "application/json" }
-    });
+  // Build query string from the existing payload object
+  const params = new URLSearchParams();
+  Object.entries(payload).forEach(([key, value]) => {
+    // convert numbers to string; avoid "undefined"
+    params.append(key, value != null ? String(value) : "");
+  });
 
+  const baseUrl = "https://script.google.com/macros/s/AKfycbxpS7mlS9w0zKAJcEGz3mIX57s3Po_-pHLY93rlJLHP5HrhaWNXv_rpo4o5C0R0f1J8lQ/exec";
+  const url = `${baseUrl}?${params.toString()}`;
+
+  try {
+    // Simple GET to avoid CORS preflight
+    const response = await fetch(url, { method: "GET" });
+
+    // You may or may not be able to read JSON depending on CORS,
+    // but this will still hit the Apps Script doGet and append the row.
     if (response.ok) {
       alert("✅ Record submitted to Google Sheet!");
     } else {
