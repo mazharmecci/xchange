@@ -219,3 +219,42 @@ function formatNumber(num, locale = "en-US") {
     maximumFractionDigits: 2,
   });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const submitBtn = byId("submitBtn");
+  if (submitBtn) submitBtn.addEventListener("click", submitToSheet);
+});
+
+async function submitToSheet() {
+  const payload = {
+    instrumentName: valueOf("instrumentName"),
+    currency: valueOf("currencySelector"),
+    price: numberOf("price"),
+    packing: numberOf("packing"),
+    shipping: numberOf("shipping"),
+    totalForeign: numberOf("totalForeign"),
+    dutyPercent: numberOf("dutyPercent"),
+    clearance: numberOf("clearance"),
+    bankCharges: numberOf("bankCharges"),
+    others: numberOf("others"),
+    landingINR: byId("resultDisplay")?.textContent || ""
+  };
+
+  try {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbxpS7mlS9w0zKAJcEGz3mIX57s3Po_-pHLY93rlJLHP5HrhaWNXv_rpo4o5C0R0f1J8lQ/exec", {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: { "Content-Type": "application/json" }
+    });
+
+    if (response.ok) {
+      alert("✅ Record submitted to Google Sheet!");
+    } else {
+      alert("❌ Failed to submit record.");
+    }
+  } catch (err) {
+    console.error("Error submitting:", err);
+    alert("⚠️ Error submitting record.");
+  }
+}
+
