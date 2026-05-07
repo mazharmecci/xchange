@@ -240,10 +240,8 @@ async function submitToSheet() {
     landingINR:     byId("resultDisplay")?.textContent || ""
   };
 
-  // Build query string from the existing payload object
   const params = new URLSearchParams();
   Object.entries(payload).forEach(([key, value]) => {
-    // convert numbers to string; avoid "undefined"
     params.append(key, value != null ? String(value) : "");
   });
 
@@ -251,19 +249,16 @@ async function submitToSheet() {
   const url = `${baseUrl}?${params.toString()}`;
 
   try {
-    // Simple GET to avoid CORS preflight
-    const response = await fetch(url, { method: "GET" });
+    await fetch(url, {
+      method: "GET",
+      mode: "no-cors"   // <— key change
+    });
 
-    // You may or may not be able to read JSON depending on CORS,
-    // but this will still hit the Apps Script doGet and append the row.
-    if (response.ok) {
-      alert("✅ Record submitted to Google Sheet!");
-    } else {
-      alert("❌ Failed to submit record.");
-    }
+    // With no-cors, response is opaque (you cannot check .ok),
+    // so just assume success or add your own UX.
+    alert("✅ Record submitted (request sent to Google Apps Script).");
   } catch (err) {
     console.error("Error submitting:", err);
     alert("⚠️ Error submitting record.");
   }
 }
-
