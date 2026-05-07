@@ -245,7 +245,7 @@ async function submitToSheet() {
     params.append(key, value != null ? String(value) : "");
   });
 
-  const baseUrl = "https://script.google.com/macros/s/AKfycby2vf-NhHBORcMIwtg8PNN9oHgwjh1P1Sxmr47PzhGc1AcneqyzWEbIfXxwvk49TwFZ/exec";
+  const baseUrl = "https://script.google.com/macros/s/AKfycbxpS7mlS9w0zKAJcEGz3mIX57s3Po_-pHLY93rlJLHP5HrhaWNXv_rpo4o5C0R0f1J8lQ/exec";
   const url = `${baseUrl}?${params.toString()}`;
 
   try {
