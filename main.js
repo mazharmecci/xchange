@@ -233,42 +233,50 @@ function formatNumber(num, locale = "en-US") {
 /* ---------- Google Sheet Submission ---------- */
 
 async function submitToSheet(sheetType = "landing") {
-  const landingINRValue = (() => {
-    const principleName = valueOf("principleSelector") || "Unspecified Principle";
-    const currency      = valueOf("currencySelector") || "USD";
-    const instrumentName = (valueOf("instrumentName") || "Unnamed Instrument").trim();
+  const currency = valueOf("currencySelector") || "USD";
+  const emoji    = currencyEmojis[currency] || "💵";
 
-    const price       = numberOf("price");
-    const packing     = numberOf("packing");
-    const shipping    = numberOf("shipping");
-    const clearance   = numberOf("clearance");
-    const bankCharges = numberOf("bankCharges");
-    const others      = numberOf("others");
+  // Decide how you want the symbol to look in the sheet:
+  // Example: "USD 💵 1,234.56"
+  const currencyLabel = `${currency} ${emoji}`;
 
-    const dutyPercent = numberOf("dutyPercent");
-    const exchangeRate = numberOf("bankRate") || numberOf("exchangeRate") || 0;
+  // Recompute landing cost as a number (same as calculateLanding)
+  const price       = numberOf("price");
+  const packing     = numberOf("packing");
+  const shipping    = numberOf("shipping");
+  const clearance   = numberOf("clearance");
+  const bankCharges = numberOf("bankCharges");
+  const others      = numberOf("others");
+  const dutyPercent = numberOf("dutyPercent");
+  const exchangeRate = numberOf("bankRate") || numberOf("exchangeRate") || 0;
 
-    const totalForeign = price + packing + shipping;
-    const totalINR     = totalForeign * exchangeRate;
-    const dutyValue    = (totalINR * dutyPercent) / 100;
-    return totalINR + dutyValue + clearance + bankCharges + others;
-  })();
+  const totalForeignNum = price + packing + shipping;
+  const totalINR        = totalForeignNum * exchangeRate;
+  const dutyValue       = (totalINR * dutyPercent) / 100;
+  const landingINRNum   = totalINR + dutyValue + clearance + bankCharges + others;
+
+  // Formatted strings with currency label for sheet
+  const priceWithCurrency     = `${currencyLabel} ${formatNumber(price)}`;
+  const packingWithCurrency   = `${currencyLabel} ${formatNumber(packing)}`;
+  const shippingWithCurrency  = `${currencyLabel} ${formatNumber(shipping)}`;
+  const totalForeignWithCurr  = `${currencyLabel} ${formatNumber(totalForeignNum)}`;
+  const landingINRWithSymbol  = `₹ ${formatNumber(landingINRNum, "en-IN")}`; // INR with rupee symbol
 
   const payload = {
     principleName: valueOf("principleSelector"),
     instrumentName: valueOf("instrumentName"),
-    currency:       valueOf("currencySelector"),
-    price:          numberOf("price"),
-    packing:        numberOf("packing"),
-    shipping:       numberOf("shipping"),
-    totalForeign:   numberOf("totalForeign"),
-    dutyPercent:    numberOf("dutyPercent"),
-    clearance:      numberOf("clearance"),
-    bankCharges:    numberOf("bankCharges"),
-    others:         numberOf("others"),
-    landingINR:     byId("resultDisplay")?.textContent || "",  // full text block
-    landingINRValue: landingINRValue,                          // NEW: numeric only
-    sheetType:      sheetType,                                 // "landing" or "list"
+    currency:       currency,
+    price:          priceWithCurrency,
+    packing:        packingWithCurrency,
+    shipping:       shippingWithCurrency,
+    totalForeign:   totalForeignWithCurr,
+    dutyPercent:    dutyPercent,
+    clearance:      clearance,
+    bankCharges:    bankCharges,
+    others:         others,
+    landingINR:     byId("resultDisplay")?.textContent || "",
+    landingINRValue: landingINRWithSymbol,  // now includes ₹ in the last column
+    sheetType:      sheetType,              // "landing" or "list"
   };
 
   const params = new URLSearchParams();
