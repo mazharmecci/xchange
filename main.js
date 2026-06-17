@@ -6,7 +6,7 @@ const currencyEmojis = {
   EUR: "💶",
 };
 
-// Removed "duty" from moneyFields because it's now percentage-based
+// "duty" is percentage-based now
 const moneyFields = ["price", "packing", "shipping", "clearance", "bankCharges", "others"];
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -16,9 +16,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Failed to load exchange rates, using defaults from loader.", err);
   }
 
-  const currencySelector = byId("currencySelector");
-  const calcBtn = byId("calcBtn");
-  const breakdownBtn = byId("breakdownBtn");
+  const currencySelector   = byId("currencySelector");
+  const calcBtn            = byId("calcBtn");
+  const breakdownBtn       = byId("breakdownBtn");
+  const submitLandingBtn   = byId("submitLandingBtn");
+  const submitListBtn      = byId("submitListBtn");
 
   if (currencySelector) {
     updateCurrency();
@@ -28,18 +30,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  if (calcBtn) calcBtn.addEventListener("click", calculateLanding);
+  if (calcBtn)      calcBtn.addEventListener("click", calculateLanding);
   if (breakdownBtn) breakdownBtn.addEventListener("click", toggleBreakdown);
 
-  // Attach listeners to update Total Foreign Cost live
-  ["price", "packing", "shipping"].forEach(id => {
+  // Live update Total Foreign Cost
+  ["price", "packing", "shipping"].forEach((id) => {
     const input = byId(id);
     if (input) input.addEventListener("input", updateTotalForeign);
   });
 
-  // Submit button listener
-  const submitBtn = byId("submitBtn");
-  if (submitBtn) submitBtn.addEventListener("click", submitToSheet);
+  // Submit buttons
+  if (submitLandingBtn) {
+    submitLandingBtn.addEventListener("click", () => submitToSheet("landing"));
+  }
+  if (submitListBtn) {
+    submitListBtn.addEventListener("click", () => submitToSheet("list"));
+  }
 });
 
 /* ---------- UI Updaters ---------- */
@@ -74,14 +80,14 @@ function updateCurrency() {
 
   // Exchange / bank rates
   const rate = exchangeRates[currency];
-  const ex = byId("exchangeRate");
+  const ex   = byId("exchangeRate");
   const bank = byId("bankRate");
 
   if (rate && ex && bank) {
-    ex.value = rate.toFixed(4);
+    ex.value   = rate.toFixed(4);
     bank.value = (rate * 1.04).toFixed(4); // 4% over base rate
   } else {
-    if (ex) ex.value = "";
+    if (ex)   ex.value = "";
     if (bank) bank.value = "";
   }
 
@@ -101,7 +107,7 @@ function resetFields() {
   const totalForeign = byId("totalForeign");
   if (totalForeign) totalForeign.value = "";
 
-  const resultDisplay = byId("resultDisplay");
+  const resultDisplay   = byId("resultDisplay");
   const breakdownDetails = byId("breakdownDetails");
   if (resultDisplay) resultDisplay.textContent = "";
   if (breakdownDetails) {
@@ -116,12 +122,11 @@ function resetFields() {
 /* ---------- Foreign Cost updater ---------- */
 
 function updateTotalForeign() {
-  const price = numberOf("price");
-  const packing = numberOf("packing");
+  const price    = numberOf("price");
+  const packing  = numberOf("packing");
   const shipping = numberOf("shipping");
   const totalForeign = price + packing + shipping;
 
-  // Show formatted value with commas in readonly text field
   setValue("totalForeign", formatNumber(totalForeign));
 }
 
@@ -129,25 +134,24 @@ function updateTotalForeign() {
 
 function calculateLanding() {
   const principleName = valueOf("principleSelector") || "Unspecified Principle";
-  const currency = valueOf("currencySelector") || "USD";
+  const currency      = valueOf("currencySelector") || "USD";
   const instrumentName = (valueOf("instrumentName") || "Unnamed Instrument").trim();
 
-  const price = numberOf("price");
-  const packing = numberOf("packing");
-  const shipping = numberOf("shipping");
-  const clearance = numberOf("clearance");
+  const price       = numberOf("price");
+  const packing     = numberOf("packing");
+  const shipping    = numberOf("shipping");
+  const clearance   = numberOf("clearance");
   const bankCharges = numberOf("bankCharges");
-  const others = numberOf("others");
+  const others      = numberOf("others");
 
-  const dutyPercent = numberOf("dutyPercent"); // percentage input
+  const dutyPercent = numberOf("dutyPercent");
   const exchangeRate = numberOf("bankRate") || numberOf("exchangeRate") || 0;
 
   const totalForeign = price + packing + shipping;
-  const totalINR = totalForeign * exchangeRate;
-  const dutyValue = (totalINR * dutyPercent) / 100;
-  const landingINR = totalINR + dutyValue + clearance + bankCharges + others;
+  const totalINR     = totalForeign * exchangeRate;
+  const dutyValue    = (totalINR * dutyPercent) / 100;
+  const landingINR   = totalINR + dutyValue + clearance + bankCharges + others;
 
-  // Update readonly field
   setValue("totalForeign", formatNumber(totalForeign));
 
   const resultLines = [
@@ -162,13 +166,13 @@ function calculateLanding() {
     `(${price} + ${packing} + ${shipping}) × ${exchangeRate.toFixed(4)} = ₹${formatNumber(totalINR, "en-IN")}`,
     "",
     `➕ Duty (${dutyPercent}% of INR) = ₹${formatNumber(dutyValue, "en-IN")}`,
-    `➕ Clearance, Bank Charges, Others`,
+    "➕ Clearance, Bank Charges, Others",
     `₹${formatNumber(totalINR, "en-IN")} + ₹${formatNumber(dutyValue, "en-IN")} + ₹${clearance} + ₹${bankCharges} + ₹${others}`,
     "",
     `🎯 Final Landing Cost = ₹${formatNumber(landingINR, "en-IN")}`,
   ];
 
-  const resultDisplay = byId("resultDisplay");
+  const resultDisplay    = byId("resultDisplay");
   const breakdownDetails = byId("breakdownDetails");
 
   if (resultDisplay) resultDisplay.textContent = resultLines.join("\n");
@@ -228,7 +232,7 @@ function formatNumber(num, locale = "en-US") {
 
 /* ---------- Google Sheet Submission ---------- */
 
-async function submitToSheet() {
+async function submitToSheet(sheetType = "landing") {
   const payload = {
     principleName: valueOf("principleSelector"),
     instrumentName: valueOf("instrumentName"),
@@ -241,7 +245,8 @@ async function submitToSheet() {
     clearance:      numberOf("clearance"),
     bankCharges:    numberOf("bankCharges"),
     others:         numberOf("others"),
-    landingINR:     byId("resultDisplay")?.textContent || ""
+    landingINR:     byId("resultDisplay")?.textContent || "",
+    sheetType:      sheetType, // "landing" or "list"
   };
 
   const params = new URLSearchParams();
@@ -249,13 +254,14 @@ async function submitToSheet() {
     params.append(key, value != null ? String(value) : "");
   });
 
-  const baseUrl = "https://script.google.com/macros/s/AKfycbxpS7mlS9w0zKAJcEGz3mIX57s3Po_-pHLY93rlJLHP5HrhaWNXv_rpo4o5C0R0f1J8lQ/exec";
+  const baseUrl =
+    "https://script.google.com/macros/s/AKfycbxpS7mlS9w0zKAJcEGz3mIX57s3Po_-pHLY93rlJLHP5HrhaWNXv_rpo4o5C0R0f1J8lQ/exec";
   const url = `${baseUrl}?${params.toString()}`;
 
   try {
     await fetch(url, {
       method: "GET",
-      mode: "no-cors"   // request is sent but response is opaque
+      mode: "no-cors",
     });
 
     alert("✅ Record submitted (request sent to Google Apps Script).");
