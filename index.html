@@ -117,17 +117,23 @@
     <button id="calcBtn">Calculate</button>
   </div>
 
-  <!-- Results -->
-  <div class="section grid-1">
-    <pre id="resultDisplay"></pre>
-    <button id="breakdownBtn">📊 View Breakdown</button>
-    <pre id="breakdownDetails" style="display:none;"></pre>
-  </div>
 
-  <!-- Submit Button (inside form) -->
-  <div class="section grid-1">
-    <button id="submitBtn">📤 Submit to Google Sheet</button>
-  </div>
+<!-- Submit Buttons (inside form) -->
+<div class="section grid-1" style="display:flex; gap:8px; flex-wrap:wrap;">
+  <!-- Landing Price: neutral / primary -->
+  <button id="submitLandingBtn" type="button"
+          style="padding:8px 14px; border:none; border-radius:4px;
+                 background:#2563eb; color:#ffffff; cursor:pointer;">
+    📤 Save Landing Price
+  </button>
+
+  <!-- List Price: light orange -->
+  <button id="submitListBtn" type="button"
+          style="padding:8px 14px; border:none; border-radius:4px;
+                 background:#fed7aa; color:#7c2d12; cursor:pointer;">
+    📤 Save List Price
+  </button>
+</div>
 </main>
 
   <!-- Scripts -->
