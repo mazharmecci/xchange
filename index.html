@@ -137,8 +137,33 @@
     </button>
   </div>
 
+<!-- Action & Breakdown Buttons -->
+<div class="section grid-1">
+  <div style="
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+  ">
+    <button id="calcBtn" type="button"
+            style="display:inline-block; width:auto;
+                   padding:8px 20px; border:none; border-radius:9999px;
+                   background:#2563eb; color:#ffffff; cursor:pointer;
+                   font-size:14px; line-height:1.3; white-space:nowrap;">
+      Calculate
+    </button>
+
+    <button id="breakdownBtn" type="button"
+            style="display:inline-block; width:auto;
+                   padding:8px 20px; border:none; border-radius:9999px;
+                   background:#0d9488; color:#ffffff; cursor:pointer;
+                   font-size:14px; line-height:1.3; white-space:nowrap;">
+      📊 View Breakdown
+    </button>
+  </div>
+
   <!-- Results styled as card -->
-  <pre id="resultDisplay" style="
+  <div id="resultCard" style="
     margin-top:12px;
     background:#f9fafb;
     border-radius:8px;
@@ -148,9 +173,13 @@
     line-height:1.4;
     white-space:pre-wrap;
     word-wrap:break-word;
-  "></pre>
+    border:none;
+    outline:none;
+  ">
+    <pre id="resultDisplay" style="margin:0; background:transparent; border:none; outline:none;"></pre>
+  </div>
 
-  <pre id="breakdownDetails" style="
+  <div id="breakdownCard" style="
     display:none;
     margin-top:12px;
     background:#f9fafb;
@@ -161,32 +190,10 @@
     line-height:1.4;
     white-space:pre-wrap;
     word-wrap:break-word;
-  "></pre>
-</div>
-
-<!-- Submit Buttons -->
-<div class="section grid-1">
-  <div style="
-    display:flex;
-    gap:10px;
-    align-items:center;
-    flex-wrap:wrap;
+    border:none;
+    outline:none;
   ">
-    <button id="submitLandingBtn" type="button"
-            style="display:inline-block; width:auto;
-                   padding:8px 20px; border:none; border-radius:9999px;
-                   background:#9333ea; color:#ffffff; cursor:pointer;
-                   font-size:14px; line-height:1.3; white-space:nowrap;">
-      📤 Save Landing Price
-    </button>
-
-    <button id="submitListBtn" type="button"
-            style="display:inline-block; width:auto;
-                   padding:8px 20px; border:none; border-radius:9999px;
-                   background:#f59e0b; color:#ffffff; cursor:pointer;
-                   font-size:14px; line-height:1.3; white-space:nowrap;">
-      📤 Save List Price
-    </button>
+    <pre id="breakdownDetails" style="margin:0; background:transparent; border:none; outline:none;"></pre>
   </div>
 </div>
 </main>
