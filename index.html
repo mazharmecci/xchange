@@ -28,79 +28,107 @@
       <div id="rateStatus" class="status-bar"></div>
     </aside>
 
-    <!-- Main Form -->
-    <main>
-      <!-- Instrument Name + Currency Selector on same row -->
-      <div class="section grid-2">
-        <div>
-          <label for="instrumentName">📝 Instrument Name</label>
-          <input type="text" id="instrumentName" placeholder="Enter instrument name">
-        </div>
-        <div>
-          <label for="currencySelector">Select Currency:</label>
-          <select id="currencySelector">
-            <option value="USD">USD 💵</option>
-            <option value="GBP">GBP 💷</option>
-            <option value="EUR">EUR 💶</option>
-          </select>
-        </div>
-      </div>
-      
-      <!-- Foreign Costs -->
-      <div class="section grid-2">
-        <div>
-          <label id="priceLabel" for="price">Instrument Price</label>
-          <input type="number" id="price" placeholder="💵 Enter price">
-        </div>
-        <div>
-          <label id="packingLabel" for="packing">Packing Price</label>
-          <input type="number" id="packing" placeholder="📦 Enter packing cost">
-        </div>
-        <div>
-          <label id="shippingLabel" for="shipping">Shipping Cost</label>
-          <input type="number" id="shipping" placeholder="🚚 Enter shipping cost">
-        </div>
-        <div>
-          <label id="totalForeignLabel" for="totalForeign">🌐 Total Foreign Cost</label>
-          <input type="text" id="totalForeign" readonly>
-        </div>
-      </div>
-
-      <!-- INR Costs -->
-      <div class="section grid-2">
-        <div>
-          <label for="dutyPercent">Duty (%)</label>
-          <input type="number" id="dutyPercent" placeholder="Enter duty %" min="0" max="100" step="0.01">
-        </div>
-        <div>
-          <label for="clearance">Clearance</label>
-          <input type="number" id="clearance" placeholder="📑 Enter clearance cost">
-        </div>
-        <div>
-          <label for="bankCharges">Bank Charges</label>
-          <input type="number" id="bankCharges" placeholder="🏦 Enter bank charges">
-        </div>
-        <div>
-          <label for="others">Others</label>
-          <input type="number" id="others" placeholder="➕ Enter other costs">
-        </div>
-      </div>
-
-      <!-- Action Button -->
-      <div class="section grid-1">
-        <button id="calcBtn">Calculate</button>
-      </div>
-
-      <!-- Results -->
-      <div class="section grid-1">
-        <pre id="resultDisplay"></pre>
-        <button id="breakdownBtn">📊 View Breakdown</button>
-        <pre id="breakdownDetails" style="display:none;"></pre>
-      </div>
-    </main>
+<!-- Main Form -->
+<main>
+  <!-- Principle Name Selector -->
+  <div class="section grid-1">
+    <label for="principleSelector">Principle Name:</label>
+    <select id="principleSelector">
+      <option value="">-- Choose Principle --</option>
+      <option value="BR Instruments">BR Instruments</option>
+      <option value="Bright">Bright</option>
+      <option value="Campden">Campden</option>
+      <option value="Dekewe">Dekewe</option>
+      <option value="Exakt">Exakt</option>
+      <option value="Fillet">Fillet</option>
+      <option value="Gigatome">Gigatome</option>
+      <option value="Giordiam key">Giordiam key</option>
+      <option value="Intelsint">Intelsint</option>
+      <option value="KD">KD</option>
+      <option value="Luptec">Luptec</option>
+      <option value="MEDIDIAGNOSTICI">MEDIDIAGNOSTICI</option>
+      <option value="Micros">Micros</option>
+      <option value="Objective imaging">Objective imaging</option>
+      <option value="Patholab">Patholab</option>
+      <option value="pfm">pfm</option>
+      <option value="PPM">PPM</option>
+      <option value="Rushab">Rushab</option>
+    </select>
   </div>
 
-  <button id="submitBtn">📤 Submit to Google Sheet</button>
+  <!-- Instrument Name + Currency Selector on same row -->
+  <div class="section grid-2">
+    <div>
+      <label for="instrumentName">📝 Instrument Name</label>
+      <input type="text" id="instrumentName" placeholder="Enter instrument name">
+    </div>
+    <div>
+      <label for="currencySelector">Select Currency:</label>
+      <select id="currencySelector">
+        <option value="USD">USD 💵</option>
+        <option value="GBP">GBP 💷</option>
+        <option value="EUR">EUR 💶</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Foreign Costs -->
+  <div class="section grid-2">
+    <div>
+      <label id="priceLabel" for="price">Instrument Price</label>
+      <input type="number" id="price" placeholder="💵 Enter price">
+    </div>
+    <div>
+      <label id="packingLabel" for="packing">Packing Price</label>
+      <input type="number" id="packing" placeholder="📦 Enter packing cost">
+    </div>
+    <div>
+      <label id="shippingLabel" for="shipping">Shipping Cost</label>
+      <input type="number" id="shipping" placeholder="🚚 Enter shipping cost">
+    </div>
+    <div>
+      <label id="totalForeignLabel" for="totalForeign">🌐 Total Foreign Cost</label>
+      <input type="text" id="totalForeign" readonly>
+    </div>
+  </div>
+
+  <!-- INR Costs -->
+  <div class="section grid-2">
+    <div>
+      <label for="dutyPercent">Duty (%)</label>
+      <input type="number" id="dutyPercent" placeholder="Enter duty %" min="0" max="100" step="0.01">
+    </div>
+    <div>
+      <label for="clearance">Clearance</label>
+      <input type="number" id="clearance" placeholder="📑 Enter clearance cost">
+    </div>
+    <div>
+      <label for="bankCharges">Bank Charges</label>
+      <input type="number" id="bankCharges" placeholder="🏦 Enter bank charges">
+    </div>
+    <div>
+      <label for="others">Others</label>
+      <input type="number" id="others" placeholder="➕ Enter other costs">
+    </div>
+  </div>
+
+  <!-- Action Button -->
+  <div class="section grid-1">
+    <button id="calcBtn">Calculate</button>
+  </div>
+
+  <!-- Results -->
+  <div class="section grid-1">
+    <pre id="resultDisplay"></pre>
+    <button id="breakdownBtn">📊 View Breakdown</button>
+    <pre id="breakdownDetails" style="display:none;"></pre>
+  </div>
+
+  <!-- Submit Button (inside form) -->
+  <div class="section grid-1">
+    <button id="submitBtn">📤 Submit to Google Sheet</button>
+  </div>
+</main>
 
   <!-- Scripts -->
   <script src="exchange-rate-loader.js"></script>
