@@ -77,10 +77,9 @@ function updateCurrency() {
   const ex = byId("exchangeRate");
   const bank = byId("bankRate");
 
-if (rate && ex && bank) {
-  ex.value = rate.toFixed(4);
-  bank.value = (rate * 1.04).toFixed(4); // 4% over base rate
-}
+  if (rate && ex && bank) {
+    ex.value = rate.toFixed(4);
+    bank.value = (rate * 1.04).toFixed(4); // 4% over base rate
   } else {
     if (ex) ex.value = "";
     if (bank) bank.value = "";
