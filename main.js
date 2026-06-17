@@ -36,6 +36,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const input = byId(id);
     if (input) input.addEventListener("input", updateTotalForeign);
   });
+
+  // Submit button listener
+  const submitBtn = byId("submitBtn");
+  if (submitBtn) submitBtn.addEventListener("click", submitToSheet);
 });
 
 /* ---------- UI Updaters ---------- */
@@ -124,6 +128,7 @@ function updateTotalForeign() {
 /* ---------- Core calculation ---------- */
 
 function calculateLanding() {
+  const principleName = valueOf("principleSelector") || "Unspecified Principle";
   const currency = valueOf("currencySelector") || "USD";
   const instrumentName = (valueOf("instrumentName") || "Unnamed Instrument").trim();
 
@@ -146,6 +151,7 @@ function calculateLanding() {
   setValue("totalForeign", formatNumber(totalForeign));
 
   const resultLines = [
+    `🏢 Principle: ${principleName}`,
     `📝 Instrument: ${instrumentName || "Unnamed Instrument"}`,
     `📊 Total Foreign Cost (${currency}): ${formatNumber(totalForeign)}`,
     `🎯 Landing Cost (INR): ₹${formatNumber(landingINR, "en-IN")}`,
@@ -220,13 +226,11 @@ function formatNumber(num, locale = "en-US") {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const submitBtn = byId("submitBtn");
-  if (submitBtn) submitBtn.addEventListener("click", submitToSheet);
-});
+/* ---------- Google Sheet Submission ---------- */
 
 async function submitToSheet() {
   const payload = {
+    principleName: valueOf("principleSelector"),
     instrumentName: valueOf("instrumentName"),
     currency:       valueOf("currencySelector"),
     price:          numberOf("price"),
@@ -251,11 +255,9 @@ async function submitToSheet() {
   try {
     await fetch(url, {
       method: "GET",
-      mode: "no-cors"   // <— key change
+      mode: "no-cors"   // request is sent but response is opaque
     });
 
-    // With no-cors, response is opaque (you cannot check .ok),
-    // so just assume success or add your own UX.
     alert("✅ Record submitted (request sent to Google Apps Script).");
   } catch (err) {
     console.error("Error submitting:", err);
