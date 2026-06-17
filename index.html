@@ -112,23 +112,31 @@
     </div>
   </div>
 
-<!-- Action Button -->
+<!-- Action & Breakdown Buttons -->
 <div class="section grid-1">
-  <button id="calcBtn" type="button"
-          style="padding:8px 14px; border:none; border-radius:4px;
-                 background:#2563eb; color:#ffffff; cursor:pointer;">
-    Calculate
-  </button>
-</div>
+  <div style="
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+  ">
+    <button id="calcBtn" type="button"
+            style="display:inline-block; width:auto;
+                   padding:8px 14px; border:none; border-radius:4px;
+                   background:#2563eb; color:#ffffff; cursor:pointer;">
+      Calculate
+    </button>
 
-<!-- Results & Breakdown -->
-<div class="section grid-1">
+    <button id="breakdownBtn" type="button"
+            style="display:inline-block; width:auto;
+                   padding:8px 14px; border:none; border-radius:4px;
+                   background:#0d9488; color:#ffffff; cursor:pointer;">
+      📊 View Breakdown
+    </button>
+  </div>
+
+  <!-- Keep result and details below the buttons -->
   <pre id="resultDisplay"></pre>
-  <button id="breakdownBtn" type="button"
-          style="padding:8px 14px; border:none; border-radius:4px;
-                 background:#0d9488; color:#ffffff; cursor:pointer;">
-    📊 View Breakdown
-  </button>
   <pre id="breakdownDetails" style="display:none;"></pre>
 </div>
 
