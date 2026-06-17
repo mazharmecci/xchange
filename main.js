@@ -233,6 +233,27 @@ function formatNumber(num, locale = "en-US") {
 /* ---------- Google Sheet Submission ---------- */
 
 async function submitToSheet(sheetType = "landing") {
+  const landingINRValue = (() => {
+    const principleName = valueOf("principleSelector") || "Unspecified Principle";
+    const currency      = valueOf("currencySelector") || "USD";
+    const instrumentName = (valueOf("instrumentName") || "Unnamed Instrument").trim();
+
+    const price       = numberOf("price");
+    const packing     = numberOf("packing");
+    const shipping    = numberOf("shipping");
+    const clearance   = numberOf("clearance");
+    const bankCharges = numberOf("bankCharges");
+    const others      = numberOf("others");
+
+    const dutyPercent = numberOf("dutyPercent");
+    const exchangeRate = numberOf("bankRate") || numberOf("exchangeRate") || 0;
+
+    const totalForeign = price + packing + shipping;
+    const totalINR     = totalForeign * exchangeRate;
+    const dutyValue    = (totalINR * dutyPercent) / 100;
+    return totalINR + dutyValue + clearance + bankCharges + others;
+  })();
+
   const payload = {
     principleName: valueOf("principleSelector"),
     instrumentName: valueOf("instrumentName"),
@@ -245,8 +266,9 @@ async function submitToSheet(sheetType = "landing") {
     clearance:      numberOf("clearance"),
     bankCharges:    numberOf("bankCharges"),
     others:         numberOf("others"),
-    landingINR:     byId("resultDisplay")?.textContent || "",
-    sheetType:      sheetType, // "landing" or "list"
+    landingINR:     byId("resultDisplay")?.textContent || "",  // full text block
+    landingINRValue: landingINRValue,                          // NEW: numeric only
+    sheetType:      sheetType,                                 // "landing" or "list"
   };
 
   const params = new URLSearchParams();
